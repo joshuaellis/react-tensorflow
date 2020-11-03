@@ -1,0 +1,73 @@
+{
+  "name": "react-tensorflow",
+  "version": "0.0.1",
+  "description": "TensorflowJS based hooks for react.js",
+  "main": "index.js",
+  "repository": "https://github.com/joshuaellis/react-tensorflow.git",
+  "author": "Josh Ellis <joshua.ellis18@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "tensorflow",
+    "hooks",
+    "react-hooks"
+  ],
+  "scripts": {
+    "flow": "$(npm bin)/flow",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "plugins": [
+      "flowtype"
+    ],
+    "globals": [
+      "test",
+      "describe",
+      "it",
+      "expect"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/app/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "bugs": "https://github.com/joshuaellis/react-tensorflow/issues",
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-flow": "^7.12.1",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/react-hooks": "^3.4.2",
+    "@testing-library/user-event": "^12.1.10",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.2",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "eslint": "^7.12.1",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "flow-bin": "^0.137.0",
+    "jest": "^26.6.2",
+    "prettier-standard": "^16.4.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-test-renderer": "^17.0.1",
+    "standard": "^16.0.1"
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "presets": [
+        "@babel/preset-env",
+        "@babel/preset-flow"
+    ],
+    "env": {
+        "production": {
+          "plugins": [
+            ["transform-remove-console", { "exclude": ["error"] }],
+            "transform-react-remove-prop-types"
+          ]
+        }
+      }
+  }
