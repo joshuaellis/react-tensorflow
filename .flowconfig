@@ -1,6 +1,7 @@
 [ignore]
 .*/node_modules/.*
 .*/build/.*
+.*/app/.*
 
 [include]
 
