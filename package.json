@@ -2,7 +2,10 @@
   "name": "react-tensorflow",
   "version": "0.0.1",
   "description": "TensorflowJS based hooks for react.js",
-  "main": "index.js",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "jsnext:main": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
   "repository": "https://github.com/joshuaellis/react-tensorflow.git",
   "author": "Josh Ellis <joshua.ellis18@gmail.com>",
   "license": "MIT",
@@ -13,66 +16,66 @@
     "react-hooks"
   ],
   "scripts": {
-    "flow": "$(npm bin)/flow",
+    "build": "rollup -c",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watchAll"
   },
-  "standard": {
-    "parser": "babel-eslint",
+  "standardx": {
+    "parser": "@typescript-eslint/parser",
     "plugins": [
-      "flowtype"
+      "@typescript-eslint/eslint-plugin"
     ],
-    "globals": [
+    "ignore": [
+      "/coverage/"
+    ],
+    "global": [
       "test",
       "describe",
       "it",
-      "expect"
+      "expect",
+      "jest"
     ]
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "*.js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/app/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 100,
-        "branches": 100,
-        "functions": 100,
-        "lines": 100
-      }
-    }
   },
   "bugs": "https://github.com/joshuaellis/react-tensorflow/issues",
   "peerDependencies": {
-    "react": ">=16.13",
-    "react-dom": ">=16.13"
+    "@tensorflow/tfjs": ">=2.7.0",
+    "react": ">=16.8",
+    "react-dom": ">=16.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
-    "@babel/preset-flow": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
+    "@tensorflow/tfjs": "^2.7.0",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/react-hooks": "^3.4.2",
     "@testing-library/user-event": "^12.1.10",
-    "babel-eslint": "^10.1.0",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.6",
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.9",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
     "babel-jest": "^26.6.2",
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "eslint": "^7.12.1",
-    "eslint-plugin-flowtype": "^5.2.0",
-    "flow-bin": "^0.137.0",
-    "flow-typed": "^3.2.1",
-    "jest": "^26.6.2",
+    "eslint": "^7.13.0",
+    "jest": "^26.6.3",
     "prettier-standard": "^16.4.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
-    "standard": "^16.0.1"
+    "rollup": "^2.33.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "standardx": "^7.0.0",
+    "ts-jest": "^26.4.4",
+    "ts-loader": "^8.0.10",
+    "typescript": "^4.0.5"
   }
 }

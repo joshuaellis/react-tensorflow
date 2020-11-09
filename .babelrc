@@ -1,7 +1,19 @@
 {
     "presets": [
-        "@babel/preset-env",
-        "@babel/preset-flow"
+        ["@babel/preset-env",{"targets": {"node": "current"}}],
+        "@babel/preset-typescript"
+    ],
+    "plugins": [
+      [
+        "module-resolver", 
+        {
+          "root": ["./"],
+          "alias": {
+            "types": "./src/types",
+            "utils": "./src/utils"
+          }
+        }
+      ]
     ],
     "env": {
         "production": {
