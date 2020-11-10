@@ -1,14 +1,14 @@
 module.exports = {
   preset: 'ts-jest',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['/node_modules/'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/app/'],
   coverageThreshold: {
     global: {
-      statements: 100,
-      branches: 100,
-      functions: 100,
-      lines: 100
+      statements: 92,
+      branches: 92,
+      functions: 92,
+      lines: 92
     }
   },
   moduleDirectories: ['node_modules', 'src']

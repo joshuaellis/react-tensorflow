@@ -3,7 +3,7 @@ import * as tf from '@tensorflow/tfjs'
 import { GraphModel, LayersModel, LoadOptionsType } from 'types/model'
 
 const loadModel = async (
-  url: string,
+  url: string = '',
   opts: LoadOptionsType | undefined = { layers: false }
 ): Promise<GraphModel | LayersModel | null> => {
   const { layers } = opts

@@ -5,7 +5,7 @@ import { GraphModel, LayersModel, LoadOptionsType } from 'types/model'
 import loadModel from 'helpers/loadModel'
 
 export default function useModel (
-  url: string,
+  url: string | undefined,
   opts?: LoadOptionsType
 ): GraphModel | LayersModel | null {
   const [model, setModel] = React.useState<GraphModel | LayersModel | null>(
@@ -19,10 +19,10 @@ export default function useModel (
         setModel(loadedModel)
       }
     }
-    if (url && !model) {
+    if (url) {
       getModel()
     }
-  }, [url, model])
+  }, [url])
 
   return model
 }
