@@ -1,16 +1,16 @@
 import * as React from 'react'
 
-import { GraphModel, LayersModel, LoadOptionsType } from 'types/model'
+import { ReactTensorFlow } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
 export default function useModel (
   url: string | undefined,
-  opts?: LoadOptionsType
-): GraphModel | LayersModel | null {
-  const [model, setModel] = React.useState<GraphModel | LayersModel | null>(
-    null
-  )
+  opts?: ReactTensorFlow.LoadOptionsType
+): ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null {
+  const [model, setModel] = React.useState<
+    ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null
+  >(null)
 
   React.useEffect(() => {
     const getModel = async () => {

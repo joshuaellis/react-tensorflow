@@ -2,16 +2,18 @@ import * as React from 'react'
 
 import useModel from 'hooks/useModel'
 
-import { ModelContextInterface, ModelProviderProps } from 'types/model'
+import { ReactTensorFlow } from 'types/index'
 
-export const ModelCtx = React.createContext<ModelContextInterface>(null)
+export const ModelCtx = React.createContext<
+  ReactTensorFlow.ModelContextInterface
+>(null)
 ModelCtx.displayName = 'TensorflowModel'
 
 export default function ModelProvider ({
   children,
   url,
   layerModel = false
-}: ModelProviderProps) {
+}: ReactTensorFlow.ModelProviderProps) {
   const model = useModel(url, { layers: layerModel })
 
   return <ModelCtx.Provider value={model}>{children}</ModelCtx.Provider>

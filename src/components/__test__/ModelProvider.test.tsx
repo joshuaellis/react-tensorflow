@@ -1,13 +1,13 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 
-import { ModelProviderProps } from 'types/model'
+import { ReactTensorFlow } from 'types/index'
 
 import ModelProvider from '../ModelProvider'
 
 const customRender = (
   ui: React.ReactNode,
-  providerProps?: ModelProviderProps
+  providerProps?: ReactTensorFlow.ModelProviderProps
 ) => render(<ModelProvider {...providerProps}>{ui}</ModelProvider>)
 
 describe('ModelProvider', () => {

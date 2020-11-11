@@ -1,11 +1,11 @@
 import * as tf from '@tensorflow/tfjs'
 
-import { GraphModel, LayersModel, LoadOptionsType } from 'types/model'
+import { ReactTensorFlow } from 'types/index'
 
 const loadModel = async (
   url: string = '',
-  opts: LoadOptionsType | undefined = { layers: false }
-): Promise<GraphModel | LayersModel | null> => {
+  opts: ReactTensorFlow.LoadOptionsType | undefined = { layers: false }
+): Promise<ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null> => {
   const { layers } = opts
   try {
     const [isUrlAccepted, isUrlFromTFHub] = testUrlForAcceptance(url)
