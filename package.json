@@ -1,7 +1,10 @@
 {
   "name": "react-tensorflow",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TensorflowJS based hooks for react.js",
+  "files": [
+    "/dist"
+  ],
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
   "jsnext:main": "./dist/index.es.js",
