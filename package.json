@@ -1,6 +1,6 @@
 {
   "name": "react-tensorflow",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TensorflowJS based hooks for react.js",
   "files": [
     "/dist"
@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "prebuild": "rm -rf ./dist",
-    "build": "rollup -c",
+    "build": "rollup -c && tsc-alias",
     "pretest": "rm -rf ./coverage",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll"
@@ -50,9 +50,7 @@
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
-    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
-    "@babel/preset-react": "^7.12.5",
     "@babel/preset-typescript": "^7.12.1",
     "@tensorflow/tfjs": "^2.7.0",
     "@testing-library/jest-dom": "^5.11.5",
@@ -66,8 +64,6 @@
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
     "babel-jest": "^26.6.2",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "^7.13.0",
     "jest": "^26.6.3",
@@ -76,13 +72,14 @@
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
     "rollup": "^2.33.1",
-    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
     "standardx": "^7.0.0",
     "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.10",
+    "tsc-alias": "^1.1.5",
     "typescript": "^4.0.5"
   },
   "dependencies": {}
