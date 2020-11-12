@@ -21,6 +21,7 @@
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build": "rollup -c && tsc-alias",
+    "postbuild": "node ./scripts/postbuild",
     "pretest": "rm -rf ./coverage",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll"
@@ -43,7 +44,7 @@
   },
   "bugs": "https://github.com/joshuaellis/react-tensorflow/issues",
   "peerDependencies": {
-    "@tensorflow/tfjs": ">=2.7.0",
+    "@tensorflow/tfjs": ">=2.0.0",
     "react": ">=16.8",
     "react-dom": ">=16.8"
   },
@@ -71,6 +72,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.33.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -81,6 +83,5 @@
     "ts-jest": "^26.4.4",
     "tsc-alias": "^1.1.5",
     "typescript": "^4.0.5"
-  },
-  "dependencies": {}
+  }
 }
