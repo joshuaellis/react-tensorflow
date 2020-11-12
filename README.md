@@ -68,19 +68,17 @@ Wraps the provided component in a React Context, passing the model give to the p
 
 So far there is only one hook to include the model in your react-app. As this library goes the plan would be to add more specific hooks to use with specific models e.g `usePredicition` as well as other helper hooks such as `useWebcam`.
 
-<ul>
-    <li><input checked="" disabled="" type="checkbox"> useModel as hook and HOC</li>
-    <li><input disabled="" type="checkbox"> useWebcam</li>
-    <li><input disabled="" type="checkbox"> usePrediction</li>
-    <li><input disabled="" type="checkbox"> useClassifier</li>
-    <li><input disabled="" type="checkbox"> useObjects</li>
-    <li><input disabled="" type="checkbox"> usePoses</li>
-</ul>
+- [x] useModel as hook and HOX
+- [ ] useWebcam
+- [ ] usePrediction
+- [ ] useClassifier
+- [ ] useObjects
+- [ ] usePoses
 
 Suggestions should be made through the issues tab.
 
 [typescript]: https://flat.badgen.net/badge/icon/Typed?icon=typescript&label&labelColor=blue&color=555555
-[github-watch-badge]: https://img.shields.io/github/watchers/kentcdodds/testing-workshop.svg?style=social
+[github-watch-badge]: https://img.shields.io/github/watchers/joshuaellis/react-tensorflow.svg?style=social
 [github-watch]: https://github.com/joshuaellis/react-tensorflow/watchers
 [github-star-badge]: https://img.shields.io/github/stars/joshuaellis/react-tensorflow.svg?style=social
 [github-star]: https://github.com/joshuaellis/react-tensorflow/stargazers
