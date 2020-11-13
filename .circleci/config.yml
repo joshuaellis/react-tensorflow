@@ -1,7 +1,19 @@
+jobs:
+  test:
+    executor:
+      name: node/default
+      tag: '13'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: yarn run test
+          name: Run YARN tests
 version: 2.1
 orbs:
-  yarn: itinerisltd/yarn@2.1.1
+  yarn: circleci/node@4.1.0
 workflows:
   node-tests:
     jobs:
-      - node/test
+      - test
