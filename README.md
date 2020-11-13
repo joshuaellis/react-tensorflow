@@ -4,6 +4,8 @@
 [![github-star-badge]][github-star]
 [![twitter-badge]][twitter]
 ![Typed with TypeScript][typescript]
+[![codecov](https://codecov.io/gh/joshuaellis/react-tensorflow/branch/master/graph/badge.svg)](https://codecov.io/gh/joshuaellis/react-tensorflow)
+[![CircleCI](https://circleci.com/gh/joshuaellis/react-tensorflow.svg?style=svg)](https://circleci.com/gh/joshuaellis/react-tensorflow)
 
 > A library of React hooks and HOCs written in Typescript to use Tensorflow models in your application! 🤖🧠
 
