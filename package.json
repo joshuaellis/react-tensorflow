@@ -23,6 +23,7 @@
     "build": "rollup -c && tsc-alias",
     "postbuild": "node ./scripts/postbuild",
     "pretest": "rm -rf ./coverage",
+    "prepublishOnly": "yarn test --forceExit && yarn build",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll"
   },
