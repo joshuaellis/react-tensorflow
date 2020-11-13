@@ -4,13 +4,17 @@ import { ReactTensorFlow } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
+import { ModelCtx } from 'components/ModelProvider'
+
 export default function useModel (
-  url: string | undefined,
+  url?: string | undefined,
   opts?: ReactTensorFlow.LoadOptionsType
 ): ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null {
   const [model, setModel] = React.useState<
     ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null
   >(null)
+
+  const contextModel = React.useContext(ModelCtx)
 
   React.useEffect(() => {
     const getModel = async () => {
@@ -24,5 +28,5 @@ export default function useModel (
     }
   }, [url])
 
-  return model
+  return model || contextModel
 }

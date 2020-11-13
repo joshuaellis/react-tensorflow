@@ -1,10 +1,14 @@
+import * as React from 'react'
 import { renderHook } from '@testing-library/react-hooks'
+
+import ModelProvider from 'components/ModelProvider'
 
 import useModel from '../useModel'
 
 describe('useModel Hook', () => {
   const acceptedModelUrls = [
-    'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1'
+    'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1',
+    'https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1'
   ]
   const notAcceptedModelsUrls = [
     'https://www.google.com',
@@ -17,7 +21,7 @@ describe('useModel Hook', () => {
       const { result, waitForNextUpdate } = renderHook(() => useModel(url))
       expect(result.current).toBeNull()
       await waitForNextUpdate()
-      expect(result.current).toMatchObject({})
+      expect(result.current).toMatchObject({ name: 'TF Graph Model' })
     })
   })
 
@@ -34,6 +38,23 @@ describe('useModel Hook', () => {
     )
     expect(result.current).toBeNull()
     await waitForNextUpdate()
-    expect(result.current).toMatchObject({})
+    expect(result.current).toMatchObject({ name: 'TF Layer Model' })
+  })
+
+  test('If not passed url, the model should use the Model Context', async () => {
+    const wrapper: React.FC<{ children: React.ComponentType }> = ({
+      children
+    }) => (
+      <ModelProvider url='https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1'>
+        {children}
+      </ModelProvider>
+    )
+    const { result, waitForNextUpdate } = renderHook(() => useModel(), {
+      wrapper
+    })
+
+    expect(result.current).toBeNull()
+    await waitForNextUpdate()
+    expect(result.current).toMatchObject({ name: 'TF Graph Model' })
   })
 })
