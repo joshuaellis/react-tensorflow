@@ -11,5 +11,7 @@ module.exports = {
       lines: 92
     }
   },
-  moduleDirectories: ['node_modules', 'src']
+  moduleDirectories: ['node_modules', 'src'],
+  coverageDirectory: './coverage/',
+  collectCoverage: true
 }
