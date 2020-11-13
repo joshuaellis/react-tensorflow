@@ -1,0 +1,23 @@
+jobs:
+  test:
+    executor:
+      name: node/default
+      tag: '14.0'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: yarn run test
+          name: Run YARN tests
+      - codecov/upload:
+          file: './coverage/clover.xml'
+          token: '0acd149b-5a54-408e-8fe1-e190d3ea0e9a'
+version: 2.1
+orbs:
+  node: circleci/node@4.1.0
+  codecov: codecov/codecov@1.0.2
+workflows:
+  node-tests:
+    jobs:
+      - test
