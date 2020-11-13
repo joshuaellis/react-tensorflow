@@ -4,7 +4,7 @@ import { ReactTensorFlow } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
-import { ModelCtx } from 'components/ModelProvider'
+import ModelCtx from 'components/ModelContext'
 
 export default function useModel (
   url?: string | undefined,

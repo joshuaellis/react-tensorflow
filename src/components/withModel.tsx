@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { ReactTensorFlow } from 'types/index'
 
-import { ModelCtx } from './ModelProvider'
+import ModelCtx from './ModelContext'
 
 interface WithModelProps {
   model: ReactTensorFlow.ModelContextInterface

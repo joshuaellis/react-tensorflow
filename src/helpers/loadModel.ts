@@ -2,12 +2,19 @@ import * as tf from '@tensorflow/tfjs'
 
 import { ReactTensorFlow } from 'types/index'
 
+const ERR_MSG =
+  'Failed to pass a url using a valid scheme - https://www.tensorflow.org/js/guide/save_load#loading_a_tfmodel'
+
 const loadModel = async (
-  url: string = '',
+  url: string,
   opts: ReactTensorFlow.LoadOptionsType | undefined = { layers: false }
 ): Promise<ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null> => {
   const { layers } = opts
   try {
+    if (!url) {
+      throw new Error(ERR_MSG)
+    }
+
     const [isUrlAccepted, isUrlFromTFHub] = testUrlForAcceptance(url)
 
     if (isUrlAccepted && !layers) {
@@ -19,12 +26,10 @@ const loadModel = async (
       const layerModel = await tf.loadLayersModel(url)
       return layerModel
     } else {
-      throw new Error(
-        'Failed to pass a url using a valid scheme - https://www.tensorflow.org/js/guide/save_load#loading_a_tfmodel'
-      )
+      throw new Error(ERR_MSG)
     }
   } catch (err) {
-    console.error(err)
+    console.error(err.message)
     return null
   }
 }

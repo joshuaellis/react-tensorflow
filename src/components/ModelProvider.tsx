@@ -4,10 +4,7 @@ import useModel from 'hooks/useModel'
 
 import { ReactTensorFlow } from 'types/index'
 
-export const ModelCtx = React.createContext<
-  ReactTensorFlow.ModelContextInterface
->(null)
-ModelCtx.displayName = 'TensorflowModel'
+import ModelCtx from './ModelContext'
 
 export default function ModelProvider ({
   children,
