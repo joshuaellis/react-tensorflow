@@ -1,4 +1,9 @@
-const attachWebcam = async (elem: HTMLVideoElement | null) => {
+import { ReactTensorflow } from 'types/index'
+
+const attachWebcam = async (
+  elem: HTMLVideoElement | null,
+  opts?: ReactTensorflow.AttachWebcamOptions
+) => {
   try {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       throw new Error('No camera available')
@@ -7,7 +12,17 @@ const attachWebcam = async (elem: HTMLVideoElement | null) => {
       throw new Error('No video element passed')
     }
 
-    elem.srcObject = await navigator.mediaDevices.getUserMedia()
+    const defaults: ReactTensorflow.AttachWebcamOptions = {
+      audio: false,
+      video: true,
+      facingMode: 'user',
+      width: elem.width,
+      height: elem.height
+    }
+    elem.srcObject = await navigator.mediaDevices.getUserMedia({
+      ...defaults,
+      ...opts
+    })
   } catch (err) {
     console.error(err.message)
     throw err

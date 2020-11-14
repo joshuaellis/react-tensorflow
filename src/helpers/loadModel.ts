@@ -1,14 +1,14 @@
 import * as tf from '@tensorflow/tfjs'
 
-import { ReactTensorFlow } from 'types/index'
+import { ReactTensorflow } from 'types/index'
 
 const ERR_MSG =
   'Failed to pass a url using a valid scheme - https://www.tensorflow.org/js/guide/save_load#loading_a_tfmodel'
 
 const loadModel = async (
-  url: string,
-  opts: ReactTensorFlow.LoadOptionsType | undefined = { layers: false }
-): Promise<ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null> => {
+  url: string | undefined,
+  opts: ReactTensorflow.LoadOptionsType | undefined = { layers: false }
+): Promise<ReactTensorflow.GraphModel | ReactTensorflow.LayersModel | null> => {
   const { layers } = opts
   try {
     if (!url) {

@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { ReactTensorFlow } from 'types/index'
+import { ReactTensorflow } from 'types/index'
 
-const ModelCtx = React.createContext<ReactTensorFlow.ModelContextInterface>(
+const ModelCtx = React.createContext<ReactTensorflow.ModelContextInterface>(
   null
 )
 ModelCtx.displayName = 'TensorflowModel'

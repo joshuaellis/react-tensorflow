@@ -1,11 +1,11 @@
 import * as React from 'react'
 
-import { ReactTensorFlow } from 'types/index'
+import { ReactTensorflow } from 'types/index'
 
 import ModelCtx from './ModelContext'
 
 interface WithModelProps {
-  model: ReactTensorFlow.ModelContextInterface
+  model: ReactTensorflow.ModelContextInterface
 }
 
 const withModel = <T extends WithModelProps = WithModelProps>(

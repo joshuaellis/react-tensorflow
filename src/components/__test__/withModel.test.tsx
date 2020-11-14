@@ -2,13 +2,13 @@ import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import { ReactTensorFlow } from 'types/index'
+import { ReactTensorflow } from 'types/index'
 
 import ModelProvider from '../ModelProvider'
 import withModel from '../withModel'
 
 const ExampleComponent = withModel(
-  ({ model }: { model: ReactTensorFlow.ModelContextInterface }) => (
+  ({ model }: { model: ReactTensorflow.ModelContextInterface }) => (
     <div data-testid='model-name'>
       {model ? <h1 role='title'>{model.name}</h1> : null}
     </div>
