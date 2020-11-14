@@ -1,17 +1,17 @@
 import * as React from 'react'
 
-import { ReactTensorFlow } from 'types/index'
+import { ReactTensorflow } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
-import { ModelCtx } from 'components/ModelProvider'
+import ModelCtx from 'components/ModelContext'
 
 export default function useModel (
   url?: string | undefined,
-  opts?: ReactTensorFlow.LoadOptionsType
-): ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null {
+  opts?: ReactTensorflow.LoadOptionsType
+): ReactTensorflow.GraphModel | ReactTensorflow.LayersModel | null {
   const [model, setModel] = React.useState<
-    ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null
+    ReactTensorflow.GraphModel | ReactTensorflow.LayersModel | null
   >(null)
 
   const contextModel = React.useContext(ModelCtx)
