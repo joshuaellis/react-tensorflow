@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs'
 
-export declare namespace ReactTensorFlow {
+export declare namespace ReactTensorflow {
   interface GraphModel extends tf.InferenceModel {
     name?: string
   }
@@ -17,5 +17,15 @@ export declare namespace ReactTensorFlow {
     url?: string
     children?: React.ReactNode
     layerModel?: boolean
+  }
+
+  interface AttachWebcamOptions extends MediaStreamConstraints {
+    width?: number
+    height?: number
+    facingMode?: string
+  }
+
+  type UsePredictionOptions = {
+    modelUrl?: string
   }
 }
