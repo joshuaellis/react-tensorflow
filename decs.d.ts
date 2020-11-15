@@ -1,1 +1,1 @@
-declare module "standardx"
+declare module 'standardx'

@@ -9,8 +9,6 @@ export default function useDataRef (
   React.useEffect(() => {
     if (dataRef.current && data !== dataRef.current) {
       setData(dataRef.current)
-    } else {
-      return
     }
   }, [dataRef])
 

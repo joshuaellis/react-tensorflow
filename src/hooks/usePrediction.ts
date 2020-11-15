@@ -16,10 +16,8 @@ export default function usePrediction (opts:ReactTensorflow.UsePredictionOptions
   const data = useDataRef(dataRef)
 
   React.useEffect(() => {
-    if (!model || !data) {
-      return
-    } else {
-        Promise.resolve(getPrediction(model, data)).then((prediction: tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null) => setPrediction(prediction))
+    if (model && data) {
+      Promise.resolve(getPrediction(model, data)).then((prediction: tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null) => setPrediction(prediction))
     }
   }, [model, data, prediction])
 
@@ -27,6 +25,6 @@ export default function usePrediction (opts:ReactTensorflow.UsePredictionOptions
 }
 
 const getPrediction = async (model: ReactTensorflow.GraphModel | ReactTensorflow.LayersModel, data: tf.Tensor) => {
-    const prediction = await model.predict(data, {})
-    return prediction
+  const prediction = await model.predict(data, {})
+  return prediction
 }

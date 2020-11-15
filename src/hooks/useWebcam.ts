@@ -13,9 +13,7 @@ export default function useWebcam (args?: ReactTensorflow.AttachWebcamOptions):[
   const videoRef = React.useRef<HTMLVideoElement | null>(null)
 
   React.useEffect(() => {
-    if (tfWebcam) {
-      return
-    } else {
+    if (!tfWebcam) {
       attachWebcam(videoRef.current, args)
       Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
         setTfWebcam(tfCam)

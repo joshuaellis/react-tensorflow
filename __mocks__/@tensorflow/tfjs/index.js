@@ -3,9 +3,13 @@ const tf = require('@tensorflow/tfjs')
 module.exports = {
   ...tf,
   loadGraphModel: () =>
-    new Promise((res, _) => res({ name: 'TF Graph Model', predict: v => v })),
+    new Promise((resolve, reject) =>
+      resolve({ name: 'TF Graph Model', predict: v => v })
+    ),
   loadLayersModel: () =>
-    new Promise((res, _) => res({ name: 'TF Layer Model', predict: v => v })),
+    new Promise((resolve, reject) =>
+      resolve({ name: 'TF Layer Model', predict: v => v })
+    ),
   data: {
     ...tf.data,
     webcam: () => ({

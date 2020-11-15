@@ -19,15 +19,16 @@
     "react-hooks"
   ],
   "scripts": {
-    "prebuild": "rm -rf ./dist",
     "build": "rollup -c && tsc-alias",
+    "format": "prettier-standard --format",
     "postbuild": "node ./scripts/postbuild",
+    "prebuild": "rm -rf ./dist",
     "pretest": "rm -rf ./coverage",
     "prepublishOnly": "yarn test --forceExit && yarn build",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll"
   },
-  "standardx": {
+  "standard": {
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint/eslint-plugin"
@@ -36,6 +37,8 @@
       "/coverage/"
     ],
     "global": [
+      "HTMLVideoElement",
+      "requestAnimationFrame",
       "test",
       "describe",
       "it",
