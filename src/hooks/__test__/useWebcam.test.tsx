@@ -50,29 +50,29 @@ describe('useWebcam', () => {
     )
   })
 
-  // it('should return a tensor at a size of 75 x 75', async () => {
-  //   const expected: Array<number> = [1, 75, 75, 3]
+  it('should return a tensor at a size of 75 x 75', async () => {
+    const expected: Array<number> = [1, 75, 75, 3]
 
-  //   const VideoComponent: React.FC = () => {
-  //     const [ref, tensor] = useWebcam({
-  //       width: 75,
-  //       height: 75
-  //     })
+    const VideoComponent: React.FC = () => {
+      const [ref, tensor] = useWebcam({
+        width: 75,
+        height: 75
+      })
 
-  //     return (
-  //       <div>
-  //         <video width={150} height={150} ref={ref} />
-  //         {tensor && <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>}
-  //       </div>
-  //     )
-  //   }
+      return (
+        <div>
+          <video width={150} height={150} ref={ref} />
+          {tensor && <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>}
+        </div>
+      )
+    }
 
-  //   render(<VideoComponent />)
+    render(<VideoComponent />)
 
-  //   await waitFor(() => expect(screen.getAllByTestId('tfp')))
+    await waitFor(() => expect(screen.getAllByTestId('tfp')))
 
-  //   expect(screen.getByTestId('tfp')).toHaveTextContent(
-  //     JSON.stringify(expected)
-  //   )
-  // })
+    expect(screen.getByTestId('tfp')).toHaveTextContent(
+      JSON.stringify(expected)
+    )
+  })
 })
