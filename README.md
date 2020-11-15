@@ -66,13 +66,35 @@ withModel(Component: React.ComponentType): JSX.Element
 
 Wraps the provided component in a React Context, passing the model give to the provider as a prop.
 
+### useWebcam
+
+```js
+useWebcam (options?: {
+    width?: number
+    height?: number
+    facingMode?: string
+  }): [React.MutableRefObject, tf.Tensor | null]
+```
+
+Provides a ref to be used on a video element, the hook then returns a tensor with shape `[1, width, height, 3]` where the width and height are either dictated by the element's width & height or the provided argument documented above. The options argument while documented above can infact take all the properties of the [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints).
+
+### usePrediction
+
+```js
+usePrediction (options?: {
+  modelUrl?: string
+}): [React.MutableRefObject, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
+```
+
+Provides a ref to the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new Tensor as the prediction using either the model set with the `ModelProvider` component or by passing a url in the options argument as it uses `useModel` under the hood.
+
 ## Roadmap
 
 So far there is only one hook to include the model in your react-app. As this library goes the plan would be to add more specific hooks to use with specific models e.g `usePredicition` as well as other helper hooks such as `useWebcam`.
 
 - [x] useModel as hook and HOX
-- [ ] useWebcam
-- [ ] usePrediction
+- [x] useWebcam
+- [x] usePrediction
 - [ ] useClassifier
 - [ ] useObjects
 - [ ] usePoses
