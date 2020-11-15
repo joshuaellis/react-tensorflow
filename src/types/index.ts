@@ -24,4 +24,8 @@ export declare namespace ReactTensorflow {
     height?: number
     facingMode?: string
   }
+
+  type UsePredictionOptions = {
+    modelUrl?: string
+  }
 }
