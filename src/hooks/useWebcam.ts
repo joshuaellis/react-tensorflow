@@ -5,34 +5,36 @@ import { WebcamIterator } from '@tensorflow/tfjs-data/dist/iterators/webcam_iter
 import attachWebcam from 'helpers/attachWebcam'
 import { getImageFromWebcam } from 'helpers/image'
 
-import { ReactTensorflow } from 'types/index'
+import { AttachWebcamOptions } from 'types/index'
 
-export default function useWebcam (args?: ReactTensorflow.AttachWebcamOptions):[React.MutableRefObject<HTMLVideoElement | null>, tf.Tensor| null] {
+export default function useWebcam (
+  args?: AttachWebcamOptions
+): [React.MutableRefObject<HTMLVideoElement | null>, tf.Tensor | null] {
   const [tfWebcam, setTfWebcam] = React.useState<WebcamIterator | null>(null)
   const [imageTensor, setImageTensor] = React.useState<tf.Tensor | null>(null)
   const videoRef = React.useRef<HTMLVideoElement | null>(null)
 
   React.useEffect(() => {
-    if (!tfWebcam) {
-      attachWebcam(videoRef.current, args)
-      Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
+    if (tfWebcam === null) {
+      void attachWebcam(videoRef.current, args)
+      void Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
         setTfWebcam(tfCam)
       )
     }
   }, [videoRef])
 
   React.useEffect(() => {
-    if (!tfWebcam || !videoRef) {
+    if (tfWebcam === null && videoRef === null) {
       return
     }
 
     const { current: video } = videoRef
 
-    Promise.resolve(
+    void Promise.resolve(
       getImageFromWebcam(
         tfWebcam,
-        args?.width || video?.width,
-        args?.height || video?.height
+        args?.width ?? video?.width,
+        args?.height ?? video?.height
       )
     ).then(tensor =>
       requestAnimationFrame(() => {
@@ -48,7 +50,7 @@ const getTensorflowWebcam = async (
   elem: HTMLVideoElement | null
 ): Promise<WebcamIterator | null> => {
   try {
-    if (!elem) {
+    if (elem === null) {
       throw new Error(
         'Failed to pass element to react-tensorflow/getTensorflowWebcam'
       )

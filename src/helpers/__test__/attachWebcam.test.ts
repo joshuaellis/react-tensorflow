@@ -16,7 +16,7 @@ describe('attachWebcam', () => {
     await expect(attachWebcam(null)).rejects.toThrow('No video element passed')
   })
 
-  it('should pass arguments to getUserMedia', () => {
+  it('should pass arguments to getUserMedia', async () => {
     const video = document.createElement('video')
 
     const args = {
@@ -27,12 +27,12 @@ describe('attachWebcam', () => {
       height: 420
     }
 
-    attachWebcam(video, args)
+    await attachWebcam(video, args)
 
     expect(getUserMediaMock).toHaveBeenCalledWith(args)
   })
 
-  it('should pass defaults to getUserMedia if no arguments are passed', () => {
+  it('should pass defaults to getUserMedia if no arguments are passed', async () => {
     const video = document.createElement('video')
     video.height = 100
     video.width = 100
@@ -45,7 +45,7 @@ describe('attachWebcam', () => {
       height: video.height
     }
 
-    attachWebcam(video)
+    await attachWebcam(video)
 
     expect(getUserMediaMock).toHaveBeenCalledWith(defaults)
   })

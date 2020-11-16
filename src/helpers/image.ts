@@ -1,21 +1,7 @@
 import * as tf from '@tensorflow/tfjs'
 import { WebcamIterator } from '@tensorflow/tfjs-data/dist/iterators/webcam_iterator'
 
-const getImageFromWebcam = async (
-  webcam: WebcamIterator,
-  width: number = 150,
-  height: number = 150
-): Promise<tf.Tensor> => {
-  const img = await webcam.capture()
-
-  const processedImg = processImage(resizeImage(width, height)(cropImage(img)))
-
-  img.dispose()
-
-  return processedImg
-}
-
-const cropImage = (img: tf.Tensor3D) => {
+const cropImage = (img: tf.Tensor3D): tf.Tensor3D => {
   const [width, height] = img.shape
 
   const shorterSide = Math.min(width, height)
@@ -30,7 +16,7 @@ const cropImage = (img: tf.Tensor3D) => {
   )
 }
 
-const processImage = (img: tf.Tensor3D) =>
+const processImage = (img: tf.Tensor3D): tf.Tensor3D =>
   tf.tidy(() =>
     img
       .expandDims(0)
@@ -39,7 +25,26 @@ const processImage = (img: tf.Tensor3D) =>
       .sub(1)
   )
 
-const resizeImage = (width: number, height: number) => (img: tf.Tensor3D) =>
-  tf.image.resizeBilinear(img, [width, height])
+const resizeImage = (width: number, height: number) => (
+  img: tf.Tensor3D
+): tf.Tensor3D => tf.image.resizeBilinear(img, [width, height])
+
+const getImageFromWebcam = async (
+  webcam: WebcamIterator | null,
+  width = 150,
+  height = 150
+): Promise<tf.Tensor | null> => {
+  if (webcam === null) {
+    return null
+  }
+
+  const img = await webcam.capture()
+
+  const processedImg = processImage(resizeImage(width, height)(cropImage(img)))
+
+  img.dispose()
+
+  return processedImg
+}
 
 export { resizeImage, processImage, cropImage, getImageFromWebcam }

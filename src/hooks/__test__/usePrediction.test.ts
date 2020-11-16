@@ -4,7 +4,7 @@ import { renderHook } from '@testing-library/react-hooks'
 import usePrediction from '../usePrediction'
 
 describe('usePrediction', () => {
-  tf.setBackend('cpu')
+  void tf.setBackend('cpu')
 
   it('should return null and print an error if there is no model available', async () => {
     const { result } = renderHook(() => usePrediction())

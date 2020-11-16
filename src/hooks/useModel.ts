@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { ReactTensorflow } from 'types/index'
+import { LoadOptionsType, ModelContextInterface } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
@@ -8,25 +8,23 @@ import ModelCtx from 'components/ModelContext'
 
 export default function useModel (
   url?: string | undefined,
-  opts?: ReactTensorflow.LoadOptionsType
-): ReactTensorflow.GraphModel | ReactTensorflow.LayersModel | null {
-  const [model, setModel] = React.useState<
-    ReactTensorflow.GraphModel | ReactTensorflow.LayersModel | null
-  >(null)
+  opts?: LoadOptionsType
+): ModelContextInterface {
+  const [model, setModel] = React.useState<ModelContextInterface>(null)
 
   const contextModel = React.useContext(ModelCtx)
 
   React.useEffect(() => {
-    const getModel = async () => {
+    const getModel = async (): Promise<void> => {
       const loadedModel = await loadModel(url, opts)
-      if (loadedModel) {
+      if (loadedModel !== null) {
         setModel(loadedModel)
       }
     }
-    if (url) {
-      getModel()
+    if (url !== null) {
+      void getModel()
     }
   }, [url])
 
-  return model || contextModel
+  return model ?? contextModel
 }

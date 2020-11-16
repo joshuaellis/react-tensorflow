@@ -1,13 +1,13 @@
-const tf = require('@tensorflow/tfjs')
+import * as tf from '@tensorflow/tfjs'
 
 module.exports = {
   ...tf,
   loadGraphModel: () =>
-    new Promise((resolve, reject) =>
+    new Promise(resolve =>
       resolve({ name: 'TF Graph Model', predict: v => v })
     ),
   loadLayersModel: () =>
-    new Promise((resolve, reject) =>
+    new Promise(resolve =>
       resolve({ name: 'TF Layer Model', predict: v => v })
     ),
   data: {

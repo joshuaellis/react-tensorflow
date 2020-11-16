@@ -3,12 +3,10 @@ import * as tf from '@tensorflow/tfjs'
 import { screen, render, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import * as image from 'helpers/image'
-
 import useWebcam from '../useWebcam'
 
 describe('useWebcam', () => {
-  tf.setBackend('cpu')
+  void tf.setBackend('cpu')
   const mock = jest.fn()
   Object.defineProperty(navigator, 'mediaDevices', {
     get: () => ({
@@ -28,7 +26,7 @@ describe('useWebcam', () => {
   })
 
   it('should return a tensor the size of the video', async () => {
-    const expected: Array<number> = [1, 150, 150, 3]
+    const expected: number[] = [1, 150, 150, 3]
 
     const VideoComponent: React.FC = () => {
       const [ref, tensor] = useWebcam()
@@ -36,7 +34,9 @@ describe('useWebcam', () => {
       return (
         <div>
           <video width={150} height={150} ref={ref} />
-          {tensor && <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>}
+          {tensor !== null && (
+            <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>
+          )}
         </div>
       )
     }
@@ -51,7 +51,7 @@ describe('useWebcam', () => {
   })
 
   it('should return a tensor at a size of 75 x 75', async () => {
-    const expected: Array<number> = [1, 75, 75, 3]
+    const expected: number[] = [1, 75, 75, 3]
 
     const VideoComponent: React.FC = () => {
       const [ref, tensor] = useWebcam({
@@ -62,7 +62,9 @@ describe('useWebcam', () => {
       return (
         <div>
           <video width={150} height={150} ref={ref} />
-          {tensor && <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>}
+          {tensor !== null && (
+            <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>
+          )}
         </div>
       )
     }

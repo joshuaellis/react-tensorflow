@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs'
 
 import { resizeImage, processImage, cropImage } from '../image'
 
-tf.setBackend('cpu')
+void tf.setBackend('cpu')
 
 describe('image helpers', () => {
   const expected = [1, 150, 150, 3]
@@ -34,7 +34,7 @@ describe('image helpers', () => {
     ]
   ])
 
-  it(`should return a shape of ${expected}`, () => {
+  it(`should return a shape of ${JSON.stringify(expected)}`, () => {
     const tensor = processImage(resizeImage(150, 150)(cropImage(img)))
     expect(tensor.shape).toEqual(expected)
   })
