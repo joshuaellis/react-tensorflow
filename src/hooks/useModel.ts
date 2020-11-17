@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { LoadOptionsType, ModelContextInterface } from 'types/index'
+import { UseModelProps, ModelInterface } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 

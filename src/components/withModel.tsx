@@ -1,11 +1,11 @@
 import * as React from 'react'
 
-import { ModelContextInterface } from 'types/index'
+import { ModelInterface } from 'types/index'
 
 import ModelCtx from './ModelContext'
 
 interface WithModelProps {
-  model: ModelContextInterface
+  model: ModelInterface
 }
 
 const withModel = <T extends WithModelProps = WithModelProps>(

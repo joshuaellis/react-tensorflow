@@ -6,11 +6,17 @@ export interface GraphModel extends tf.InferenceModel {
 
 export interface LayersModel extends tf.LayersModel {}
 
+export interface UseModelProps extends LoadOptionsType {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model?: any
+  modelUrl?: string | undefined
+}
+
 export interface LoadOptionsType {
   layers?: boolean
 }
 
-export type ModelContextInterface = GraphModel | LayersModel | null
+export type ModelInterface = GraphModel | LayersModel | null
 
 export interface ModelProviderProps {
   url?: string

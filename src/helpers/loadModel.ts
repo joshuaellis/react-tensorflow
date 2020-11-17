@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs'
 
-import { LoadOptionsType, ModelContextInterface } from 'types/index'
+import { LoadOptionsType, ModelInterface } from 'types/index'
 
 const ERR_MSG =
   'Failed to pass a url using a valid scheme - https://www.tensorflow.org/js/guide/save_load#loading_a_tfmodel'

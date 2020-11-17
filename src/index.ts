@@ -4,4 +4,13 @@ import useModel from 'hooks/useModel'
 import usePrediction from 'hooks/usePrediction'
 import useWebcam from 'hooks/useWebcam'
 
-export { ModelProvider, useModel, withModel, usePrediction, useWebcam }
+import { ModelInterface } from 'types/index'
+
+export {
+  ModelProvider,
+  useModel,
+  withModel,
+  usePrediction,
+  useWebcam,
+  ModelInterface
+}

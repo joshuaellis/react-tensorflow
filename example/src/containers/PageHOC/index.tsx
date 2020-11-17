@@ -1,12 +1,12 @@
 import * as React from 'react'
 import clsx from 'clsx'
 import { Paper, Typography, makeStyles } from '@material-ui/core'
-import { withModel, ModelContextInterface } from 'react-tensorflow'
+import { withModel, ModelInterface } from 'react-tensorflow'
 import Prism from 'prismjs'
 
 import { hocExample } from 'references/codeExamples'
 
-export function PageClassifier ({ model }: { model: ModelContextInterface }) {
+export function PageClassifier ({ model }: { model: ModelInterface }) {
   const classes = useStyles()
 
   React.useEffect(() => {

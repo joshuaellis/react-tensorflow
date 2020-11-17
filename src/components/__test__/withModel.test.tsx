@@ -1,18 +1,16 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 
-import { ModelContextInterface } from 'types/index'
+import { ModelInterface } from 'types/index'
 
 import ModelProvider from '../ModelProvider'
 import withModel from '../withModel'
 
-const ExampleComponent = withModel(
-  ({ model }: { model: ModelContextInterface }) => (
-    <div data-testid='model-name'>
-      {model !== null ? <h1 role='title'>{model.name}</h1> : null}
-    </div>
-  )
-)
+const ExampleComponent = withModel(({ model }: { model: ModelInterface }) => (
+  <div data-testid='model-name'>
+    {model !== null ? <h1 role='title'>{model.name}</h1> : null}
+  </div>
+))
 
 describe('withModel', () => {
   it("should render it's children if theres no model provided", () => {
