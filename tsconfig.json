@@ -27,8 +27,7 @@
     "src/**/*",
     "decs.d.ts",
     "__mocks__/**/*",
-    "*.config.js",
-    "scripts/*"
+    "*.config.js"
   ],
-  "exclude": ["node_modules", "coverage", "dist"]
+  "exclude": ["node_modules", "coverage", "dist", "scripts/*"]
 }
