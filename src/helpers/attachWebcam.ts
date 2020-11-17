@@ -3,7 +3,7 @@ import { AttachWebcamOptions } from 'types/index'
 const attachWebcam = async (
   elem: HTMLVideoElement | null,
   opts?: AttachWebcamOptions
-): Promise<void> => {
+): Promise<MediaStream> => {
   try {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -20,10 +20,14 @@ const attachWebcam = async (
       width: elem.width,
       height: elem.height
     }
-    elem.srcObject = await navigator.mediaDevices.getUserMedia({
+    const stream = await navigator.mediaDevices.getUserMedia({
       ...defaults,
       ...opts
     })
+
+    elem.srcObject = stream
+
+    return stream
   } catch (err) {
     console.error(err.message)
     throw err

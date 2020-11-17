@@ -13,13 +13,23 @@ export default function useWebcam (
   const [tfWebcam, setTfWebcam] = React.useState<WebcamIterator | null>(null)
   const [imageTensor, setImageTensor] = React.useState<tf.Tensor | null>(null)
   const videoRef = React.useRef<HTMLVideoElement | null>(null)
+  const streamRef = React.useRef<MediaStream | null>(null)
 
   React.useEffect(() => {
     if (tfWebcam === null) {
-      void attachWebcam(videoRef.current, args)
+      void Promise.resolve(attachWebcam(videoRef.current, args)).then(stream => {
+        streamRef.current = stream
+      })
       void Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
         setTfWebcam(tfCam)
       )
+
+      return () => {
+        streamRef.current?.getTracks().forEach(track => track.stop())
+        if (videoRef.current !== null) {
+          videoRef.current.srcObject = null
+        }
+      }
     }
   }, [videoRef])
 
