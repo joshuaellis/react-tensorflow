@@ -1,13 +1,20 @@
 import * as tf from '@tensorflow/tfjs'
 
-import { ReactTensorFlow } from 'types/index'
+import { LoadOptionsType, ModelContextInterface } from 'types/index'
+
+const ERR_MSG =
+  'Failed to pass a url using a valid scheme - https://www.tensorflow.org/js/guide/save_load#loading_a_tfmodel'
 
 const loadModel = async (
-  url: string = '',
-  opts: ReactTensorFlow.LoadOptionsType | undefined = { layers: false }
-): Promise<ReactTensorFlow.GraphModel | ReactTensorFlow.LayersModel | null> => {
+  url: string | undefined,
+  opts: LoadOptionsType | undefined = { layers: false }
+): Promise<ModelContextInterface> => {
   const { layers } = opts
   try {
+    if (url === undefined) {
+      throw new Error(ERR_MSG)
+    }
+
     const [isUrlAccepted, isUrlFromTFHub] = testUrlForAcceptance(url)
 
     if (isUrlAccepted && !layers) {
@@ -19,17 +26,15 @@ const loadModel = async (
       const layerModel = await tf.loadLayersModel(url)
       return layerModel
     } else {
-      throw new Error(
-        'Failed to pass a url using a valid scheme - https://www.tensorflow.org/js/guide/save_load#loading_a_tfmodel'
-      )
+      throw new Error(ERR_MSG)
     }
   } catch (err) {
-    console.error(err)
+    console.error(err.message)
     return null
   }
 }
 
-const testUrlForAcceptance = (url: string) => {
+const testUrlForAcceptance = (url: string): boolean[] => {
   const acceptedFilePrefixes = [
     /localstorage:\/\//,
     /indexeddb:\/\//,
@@ -37,8 +42,7 @@ const testUrlForAcceptance = (url: string) => {
     /https:\/\//,
     /file:\/\//
   ]
-  const fileTypeRegex = /\.json/
-  const isUrlFromTFHub = /tfhub\.dev/.test(url)
+  const isUrlFromTFHub = url.includes('tfhub.dev')
 
   let isUrlAccepted = false
 
@@ -46,7 +50,7 @@ const testUrlForAcceptance = (url: string) => {
     isUrlAccepted = acceptedFilePrefixes.some(rex => rex.test(url))
   } else {
     isUrlAccepted =
-      acceptedFilePrefixes.some(rex => rex.test(url)) && fileTypeRegex.test(url)
+      acceptedFilePrefixes.some(rex => rex.test(url)) && url.includes('.json')
   }
 
   return [isUrlAccepted, isUrlFromTFHub]

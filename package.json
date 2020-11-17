@@ -1,6 +1,6 @@
 {
   "name": "react-tensorflow",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "TensorflowJS based hooks for react.js",
   "files": [
     "/dist"
@@ -19,28 +19,15 @@
     "react-hooks"
   ],
   "scripts": {
-    "prebuild": "rm -rf ./dist",
     "build": "rollup -c && tsc-alias",
+    "format": "prettier-standard --format",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && yarn format",
     "postbuild": "node ./scripts/postbuild",
+    "prebuild": "rm -rf ./dist",
     "pretest": "rm -rf ./coverage",
+    "prepublishOnly": "yarn test --forceExit && yarn build",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll"
-  },
-  "standardx": {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint/eslint-plugin"
-    ],
-    "ignore": [
-      "/coverage/"
-    ],
-    "global": [
-      "test",
-      "describe",
-      "it",
-      "expect",
-      "jest"
-    ]
   },
   "bugs": "https://github.com/joshuaellis/react-tensorflow/issues",
   "peerDependencies": {
@@ -57,16 +44,23 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/react-hooks": "^3.4.2",
-    "@testing-library/user-event": "^12.1.10",
+    "@types/eslint": "^7.2.4",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
-    "@typescript-eslint/eslint-plugin": "^4.6.1",
-    "@typescript-eslint/parser": "^4.6.1",
+    "@typescript-eslint/eslint-plugin": "^4.7.0",
+    "@typescript-eslint/parser": "^4.7.0",
     "babel-jest": "^26.6.2",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "^7.13.0",
+    "eslint-config-standard": "^16.0.1",
+    "eslint-config-standard-with-typescript": "^19.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-standard": "^4.1.0",
     "jest": "^26.6.3",
     "prettier-standard": "^16.4.1",
     "react": "^17.0.1",
@@ -79,7 +73,6 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
-    "standardx": "^7.0.0",
     "ts-jest": "^26.4.4",
     "tsc-alias": "^1.1.5",
     "typescript": "^4.0.5"

@@ -1,24 +1,26 @@
 import * as React from 'react'
 
-import { ReactTensorFlow } from 'types/index'
+import { ModelContextInterface } from 'types/index'
 
-import { ModelCtx } from './ModelProvider'
+import ModelCtx from './ModelContext'
 
 interface WithModelProps {
-  model: ReactTensorFlow.ModelContextInterface
+  model: ModelContextInterface
 }
 
 const withModel = <T extends WithModelProps = WithModelProps>(
   Component: React.ComponentType<T>
-) => {
-  const ComponentWithModel = (props: Omit<T, keyof WithModelProps>) => (
+): ((props: Omit<T, keyof WithModelProps>) => JSX.Element) => {
+  const ComponentWithModel = (
+    props: Omit<T, keyof WithModelProps>
+  ): JSX.Element => (
     <ModelCtx.Consumer>
       {model => <Component {...(props as T)} model={model} />}
     </ModelCtx.Consumer>
   )
 
-  ComponentWithModel.displayName = `withModel(${Component.displayName ||
-    Component.name ||
+  ComponentWithModel.displayName = `withModel(${Component.displayName ??
+    Component.name ??
     'Component'})`
 
   return ComponentWithModel
