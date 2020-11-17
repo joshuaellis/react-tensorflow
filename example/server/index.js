@@ -11,12 +11,13 @@ const startClient = () => {
   const app = express()
 
   app.get('/api/model', (_, res) => {
-    res.status(200).sendFile(path.join(__root, '/model/model.json'))
+    res.status(200).sendFile(path.join(__root, '/public/model/model.json'))
   })
+
   app.get('/api/*.bin', (req, res) => {
     const { params } = req
     const [weight] = Object.values(params)
-    res.status(200).sendFile(path.join(__root, `/model/${weight}.bin`))
+    res.status(200).sendFile(path.join(__root, `/public/model/${weight}.bin`))
   })
 
   setup(app, {

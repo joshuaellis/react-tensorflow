@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import PageHome from 'containers/PageHome'
 import PageHOC from 'containers/PageHOC'
+import PageClassifier from 'containers/PageClassifier'
 
 import { SiteDrawer, SiteHeader } from 'components/Site'
 import { ListMainNavigation } from 'components/Lists'
@@ -11,7 +12,7 @@ import { ListMainNavigation } from 'components/Lists'
 export default function App () {
   const classes = useStyles()
 
-  const [open, setOpen] = React.useState<boolean>(true)
+  const [open, setOpen] = React.useState<boolean>(false)
 
   const handleDrawOpening = () => setOpen(!open)
 
@@ -32,7 +33,8 @@ export default function App () {
         <div className={classes.appBarSpacer} />
         <Switch>
           <Route exact path='/' component={PageHome} />
-          <Route exact path='/hoc-example' component={PageHOC} />
+          <Route exact path='/hoc' component={PageHOC} />
+          <Route exact path='/classifier' component={PageClassifier} />
           <Route component={() => <Redirect to='/' />} />
         </Switch>
       </main>
@@ -46,6 +48,7 @@ const useStyles = makeStyles(theme => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
+    backgroundColor: '#212121',
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto'

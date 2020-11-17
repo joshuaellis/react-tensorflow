@@ -11,10 +11,8 @@ import { RootState } from 'src/reducers'
 
 import {
   Home as HomeIcon,
-  Input as InputIcon,
   Build as BuildIcon,
-  Equalizer as EqualizerIcon,
-  LinkedCamera as LinkedCameraIcon
+  Class as ClassIcon
 } from '@material-ui/icons'
 
 interface OwnProps {}
@@ -60,13 +58,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(ListMainNavigation)
 
 const items = [
   {
-    title: 'TF Hub Model',
+    title: 'Home',
     icon: <HomeIcon />,
     href: '/'
   },
   {
-    title: 'HOC with local model',
+    title: 'HOC',
     icon: <BuildIcon />,
-    href: '/hoc-example'
+    href: '/hoc'
+  },
+  {
+    title: 'Classifier',
+    icon: <ClassIcon />,
+    href: '/classifier'
   }
 ]
