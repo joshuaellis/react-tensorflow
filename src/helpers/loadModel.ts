@@ -7,9 +7,9 @@ const ERR_MSG =
 
 const loadModel = async (
   url: string | undefined,
-  opts: LoadOptionsType | undefined = { layers: false }
+  opts: LoadOptionsType | undefined = {}
 ): Promise<ModelContextInterface> => {
-  const { layers } = opts
+  const { layers = false } = opts
   try {
     if (url === undefined) {
       throw new Error(ERR_MSG)

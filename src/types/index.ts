@@ -7,7 +7,7 @@ export interface GraphModel extends tf.InferenceModel {
 export interface LayersModel extends tf.LayersModel {}
 
 export interface LoadOptionsType {
-  layers: boolean
+  layers?: boolean
 }
 
 export type ModelContextInterface = GraphModel | LayersModel | null
