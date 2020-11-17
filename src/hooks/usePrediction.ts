@@ -13,12 +13,11 @@ import useDataRef from './useDataRef'
 
 let T: [React.MutableRefObject<tf.Tensor | null>, Prediction]
 
-export default function usePrediction (
-  opts: UsePredictionOptions = {}
-): typeof T {
-  const { modelUrl } = opts
+export default function usePrediction ({
+  modelUrl
+}: UsePredictionOptions = {}): typeof T {
   const [prediction, setPrediction] = React.useState<Prediction>(null)
-  const model = useModel(modelUrl)
+  const model = useModel({ modelUrl })
   const dataRef = React.useRef<tf.Tensor | null>(null)
   const data = useDataRef(dataRef)
 

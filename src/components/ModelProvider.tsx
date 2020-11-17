@@ -11,7 +11,7 @@ export default function ModelProvider ({
   url,
   layerModel = false
 }: ModelProviderProps): JSX.Element {
-  const model = useModel(url, { layers: layerModel })
+  const model = useModel({ modelUrl: url, layers: layerModel })
 
   return <ModelCtx.Provider value={model}>{children}</ModelCtx.Provider>
 }

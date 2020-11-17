@@ -7,16 +7,14 @@ const ERR_MSG =
 
 const loadModel = async (
   url: string | undefined,
-  opts: LoadOptionsType | undefined = {}
-): Promise<ModelContextInterface> => {
-  const { layers = false } = opts
+  { layers = false }: LoadOptionsType | undefined = {}
+): Promise<ModelInterface> => {
   try {
     if (url === undefined) {
       throw new Error(ERR_MSG)
     }
 
     const [isUrlAccepted, isUrlFromTFHub] = testUrlForAcceptance(url)
-
     if (isUrlAccepted && !layers) {
       const graphModel = await tf.loadGraphModel(url, {
         fromTFHub: isUrlFromTFHub

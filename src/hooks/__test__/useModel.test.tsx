@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { renderHook } from '@testing-library/react-hooks'
+import * as cocoSSD from '@tensorflow-models/coco-ssd'
 
 import ModelProvider from 'components/ModelProvider'
 
@@ -18,7 +19,9 @@ describe('useModel Hook', () => {
 
   acceptedModelUrls.forEach(url => {
     test(`Returns model using ${url}`, async () => {
-      const { result, waitForNextUpdate } = renderHook(() => useModel(url))
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useModel({ modelUrl: url })
+      )
       expect(result.current).toBeNull()
       await waitForNextUpdate()
       expect(result.current).toMatchObject({ name: 'TF Graph Model' })
@@ -27,14 +30,14 @@ describe('useModel Hook', () => {
 
   notAcceptedModelsUrls.forEach((url: string) => {
     test(`Won't return model using ${url}`, () => {
-      const { result } = renderHook(() => useModel(url))
+      const { result } = renderHook(() => useModel({ modelUrl: url }))
       expect(result.current).toBeNull()
     })
   })
 
   test('Will return a model if the layers option is passed', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
-      useModel(acceptedModelUrls[0], { layers: true })
+      useModel({ modelUrl: acceptedModelUrls[0], layers: true })
     )
     expect(result.current).toBeNull()
     await waitForNextUpdate()
@@ -56,5 +59,20 @@ describe('useModel Hook', () => {
     expect(result.current).toBeNull()
     await waitForNextUpdate()
     expect(result.current).toMatchObject({ name: 'TF Graph Model' })
+  })
+
+  test('it should accept a node_module model', async () => {
+    const cocoSpy = jest
+      .spyOn(cocoSSD, 'load')
+      .mockImplementation(
+        async () => await new Promise(resolve => resolve(undefined))
+      )
+
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModel({ model: cocoSSD })
+    )
+    expect(result.current).toBe(null)
+    await waitForNextUpdate()
+    expect(cocoSpy).toBeCalled()
   })
 })

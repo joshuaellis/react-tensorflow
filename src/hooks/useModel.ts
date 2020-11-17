@@ -6,25 +6,33 @@ import loadModel from 'helpers/loadModel'
 
 import ModelCtx from 'components/ModelContext'
 
-export default function useModel (
-  url?: string | undefined,
-  opts?: LoadOptionsType
-): ModelContextInterface {
-  const [model, setModel] = React.useState<ModelContextInterface>(null)
+export default function useModel ({
+  model: modelObj,
+  modelUrl,
+  ...opts
+}: UseModelProps = {}): ModelInterface {
+  const [model, setModel] = React.useState<ModelInterface>(null)
 
   const contextModel = React.useContext(ModelCtx)
 
   React.useEffect(() => {
     const getModel = async (): Promise<void> => {
-      const loadedModel = await loadModel(url, opts)
+      const loadedModel = await loadModel(modelUrl, opts)
       if (loadedModel !== null) {
         setModel(loadedModel)
       }
     }
-    if (url !== null) {
-      void getModel()
+
+    const loadNodeModel = async (): Promise<void> => {
+      const loadedModel = await modelObj.load()
+      setModel(loadedModel)
     }
-  }, [url])
+    if (modelUrl !== undefined) {
+      void getModel()
+    } else if (modelObj !== undefined) {
+      void loadNodeModel()
+    }
+  }, [modelUrl, modelObj])
 
   return model ?? contextModel
 }
