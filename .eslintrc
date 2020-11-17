@@ -19,7 +19,7 @@
     "project": "./tsconfig.json"
   },
   "plugins": ["react", "@typescript-eslint"],
-  "ignorePatterns": ["coverage", "node_modules", "dist"],
+  "ignorePatterns": ["coverage", "node_modules", "dist", "example", "scripts"],
   "globals": {
     "HTMLVideoElement": "readonly",
     "requestAnimationFrame": "readonly",
