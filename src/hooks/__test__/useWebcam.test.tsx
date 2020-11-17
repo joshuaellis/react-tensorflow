@@ -1,12 +1,9 @@
 import * as React from 'react'
-import * as tf from '@tensorflow/tfjs'
 import { screen, render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 
 import useWebcam from '../useWebcam'
 
 describe('useWebcam', () => {
-  void tf.setBackend('cpu')
   const mock = jest.fn()
   Object.defineProperty(navigator, 'mediaDevices', {
     get: () => ({

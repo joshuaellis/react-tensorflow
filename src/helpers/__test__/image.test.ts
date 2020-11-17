@@ -2,8 +2,6 @@ import * as tf from '@tensorflow/tfjs'
 
 import { resizeImage, processImage, cropImage } from '../image'
 
-void tf.setBackend('cpu')
-
 describe('image helpers', () => {
   const expected = [1, 150, 150, 3]
 
