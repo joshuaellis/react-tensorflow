@@ -16,19 +16,17 @@ export default function useWebcam (
   const streamRef = React.useRef<MediaStream | null>(null)
 
   React.useEffect(() => {
-    if (tfWebcam === null) {
-      void Promise.resolve(attachWebcam(videoRef.current, args)).then(stream => {
-        streamRef.current = stream
-      })
-      void Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
-        setTfWebcam(tfCam)
-      )
+    void Promise.resolve(attachWebcam(videoRef.current, args)).then(stream => {
+      streamRef.current = stream
+    })
+    void Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
+      setTfWebcam(tfCam)
+    )
 
-      return () => {
-        streamRef.current?.getTracks().forEach(track => track.stop())
-        if (videoRef.current !== null) {
-          videoRef.current.srcObject = null
-        }
+    return () => {
+      streamRef.current?.getTracks().forEach(track => track.stop())
+      if (videoRef.current !== null) {
+        videoRef.current.srcObject = null
       }
     }
   }, [videoRef])
@@ -48,7 +46,12 @@ export default function useWebcam (
       )
     ).then(tensor =>
       requestAnimationFrame(() => {
-        setImageTensor(tensor)
+        setImageTensor((oldTensor) => {
+          if (oldTensor !== null) {
+            tf.dispose(oldTensor)
+          }
+          return tensor
+        })
       })
     )
   }, [videoRef, tfWebcam, imageTensor])
@@ -56,7 +59,7 @@ export default function useWebcam (
   return [videoRef, imageTensor]
 }
 
-const getTensorflowWebcam = async (
+export const getTensorflowWebcam = async (
   elem: HTMLVideoElement | null
 ): Promise<WebcamIterator | null> => {
   try {
@@ -70,6 +73,6 @@ const getTensorflowWebcam = async (
     }
   } catch (err) {
     console.error(err.message)
-    return null
+    throw err
   }
 }

@@ -2,6 +2,7 @@ import * as tf from '@tensorflow/tfjs'
 
 module.exports = {
   ...tf,
+  dispose: jest.fn(),
   loadGraphModel: () =>
     new Promise(resolve =>
       resolve({ name: 'TF Graph Model', predict: v => v })
