@@ -48,7 +48,12 @@ export default function useWebcam (
       )
     ).then(tensor =>
       requestAnimationFrame(() => {
-        setImageTensor(tensor)
+        setImageTensor((oldTensor) => {
+          if (oldTensor !== null) {
+            tf.dispose(oldTensor)
+          }
+          return tensor
+        })
       })
     )
   }, [videoRef, tfWebcam, imageTensor])
