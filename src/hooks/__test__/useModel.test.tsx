@@ -9,13 +9,16 @@ import useModel from '../useModel'
 describe('useModel Hook', () => {
   const acceptedModelUrls = [
     'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1',
-    'https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1'
+    'file://../../api/model/model.json'
   ]
+
   const notAcceptedModelsUrls = [
     'https://www.google.com',
     '1uibiwfbjnwe',
     './../../model/model.json'
   ]
+
+  jest.spyOn(console, 'error')
 
   acceptedModelUrls.forEach(url => {
     test(`Returns model using ${url}`, async () => {
@@ -28,10 +31,11 @@ describe('useModel Hook', () => {
     })
   })
 
-  notAcceptedModelsUrls.forEach((url: string) => {
+  notAcceptedModelsUrls.forEach((url: string, i) => {
     test(`Won't return model using ${url}`, () => {
       const { result } = renderHook(() => useModel({ modelUrl: url }))
       expect(result.current).toBeNull()
+      expect(console.error).toHaveBeenCalledTimes(i + 1)
     })
   })
 
@@ -44,7 +48,7 @@ describe('useModel Hook', () => {
     expect(result.current).toMatchObject({ name: 'TF Layer Model' })
   })
 
-  test('If not passed url, the model should use the Model Context', async () => {
+  test('If not passed a model, the model should use the Model Context', async () => {
     const wrapper: React.FC<{ children: React.ComponentType }> = ({
       children
     }) => (
