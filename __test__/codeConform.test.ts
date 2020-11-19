@@ -14,9 +14,5 @@ test('code conforms', async () => {
     }) => errorCount + warningCount > 0
   )
 
-  if (results.length > 0) {
-    console.log(results)
-  }
-
   expect(results).toEqual([])
 })

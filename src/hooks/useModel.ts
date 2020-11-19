@@ -18,15 +18,14 @@ export default function useModel ({
   React.useEffect(() => {
     const getModel = async (): Promise<void> => {
       const loadedModel = await loadModel(modelUrl, opts)
-      if (loadedModel !== null) {
-        setModel(loadedModel)
-      }
+      setModel(loadedModel)
     }
 
     const loadNodeModel = async (): Promise<void> => {
       const loadedModel = await modelObj.load()
       setModel(loadedModel)
     }
+
     if (modelUrl !== undefined) {
       void getModel()
     } else if (modelObj !== undefined) {

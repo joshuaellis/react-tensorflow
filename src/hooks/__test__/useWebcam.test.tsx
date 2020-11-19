@@ -40,8 +40,6 @@ describe('useWebcam', () => {
     const VideoComponent: React.FC = () => {
       const [ref, tensor] = useWebcam()
 
-      console.log(tensor)
-
       return (
         <div>
           <video width={150} height={150} ref={ref} />

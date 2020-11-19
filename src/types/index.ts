@@ -30,8 +30,11 @@ export interface AttachWebcamOptions extends MediaStreamConstraints {
   facingMode?: string
 }
 
-export interface UsePredictionOptions {
-  modelUrl?: string
+export interface UsePredictionProps extends UseModelProps {
+  predictConfig?: tf.ModelPredictConfig
+  usePredict?: boolean
 }
 
 export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null
+
+export let PredictionReturn: [React.MutableRefObject<tf.Tensor | null>, Prediction]
