@@ -37,4 +37,4 @@ export interface UsePredictionProps extends UseModelProps {
 
 export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null
 
-export let PredictionReturn: [React.MutableRefObject<tf.Tensor | null>, Prediction]
+export let PredictionReturn: [React.MutableRefObject<tf.Tensor | null>, Float32Array | null]

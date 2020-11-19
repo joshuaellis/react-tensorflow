@@ -17,7 +17,7 @@ export default function usePrediction ({
   usePredict,
   ...props
 }: UsePredictionProps = {}): typeof PredictionReturn {
-  const [prediction, setPrediction] = React.useState<Prediction>(null)
+  const [prediction, setPrediction] = React.useState<Float32Array | null>(null)
   const model = useModel({ ...props })
   const dataRef = React.useRef<tf.Tensor | null>(null)
   const data = useDataRef(dataRef)
@@ -26,7 +26,12 @@ export default function usePrediction ({
     if (model !== null && data !== null) {
       void Promise.resolve(
         getPrediction(model, data, predictConfig, usePredict)
-      ).then(prediction => setPrediction(prediction))
+      )
+        .then(
+          async prediction =>
+            (await (prediction as tf.Tensor).data()) as Float32Array
+        )
+        .then(data => setPrediction(data))
     }
   }, [model, data, prediction])
 

@@ -26,7 +26,7 @@ describe('usePrediction', () => {
 
     await waitForNextUpdate()
 
-    expect(result.current[1]).toBe(expected)
+    expect(result.current[1]).toBe(expected.dataSync())
   })
 
   it('should use .predict if a predict boolean is passed', async () => {
