@@ -40,11 +40,7 @@ const getPrediction = (
   usePredict = false
 ): Prediction => {
   if (predictConfig !== undefined || usePredict) {
-    return model.predict(data, {
-      batchSize: 32,
-      verbose: false,
-      ...predictConfig
-    })
+    return model.predict(data, predictConfig)
   } else {
     return model.execute(data, model.outputs[0].name)
   }

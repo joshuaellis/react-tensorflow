@@ -1,4 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/promise-function-async */
 import * as tf from '@tensorflow/tfjs'
+
+const modelSharedProperties = {
+  predict: (v: any) => v,
+  execute: (v: any) => v,
+  outputs: [{ name: 'output_layer' }]
+}
 
 module.exports = {
   ...tf,
@@ -7,18 +15,14 @@ module.exports = {
     new Promise(resolve =>
       resolve({
         name: 'TF Graph Model',
-        predict: v => v,
-        execute: v => v,
-        outputs: [{ name: 'output_layer' }]
+        ...modelSharedProperties
       })
     ),
   loadLayersModel: () =>
     new Promise(resolve =>
       resolve({
         name: 'TF Layer Model',
-        predict: v => v,
-        execute: v => v,
-        outputs: [{ name: 'output_layer' }]
+        ...modelSharedProperties
       })
     ),
   data: {

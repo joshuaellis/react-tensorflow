@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs'
 
-export interface GraphModel extends tf.InferenceModel {
+export interface GraphModel extends tf.GraphModel {
   name?: string
 }
 

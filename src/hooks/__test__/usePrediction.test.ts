@@ -28,4 +28,29 @@ describe('usePrediction', () => {
 
     expect(result.current[1]).toBe(expected)
   })
+
+  it('should use .predict if a predict boolean is passed', async () => {
+    const mockPredict = jest.fn().mockImplementation(v => v)
+
+    const expected = tf.tensor([1, 2, 3, 4])
+    const promise = new Promise(resolve =>
+      resolve({
+        predict: mockPredict
+      })
+    )
+
+    const { waitForNextUpdate } = renderHook(() => {
+      const arr = usePrediction({
+        model: {
+          load: async () => await promise
+        },
+        usePredict: true
+      })
+      arr[0].current = expected
+      return arr
+    })
+
+    await waitForNextUpdate()
+    expect(mockPredict).toHaveBeenCalled()
+  })
 })
