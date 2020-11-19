@@ -5,11 +5,21 @@ module.exports = {
   dispose: jest.fn(),
   loadGraphModel: () =>
     new Promise(resolve =>
-      resolve({ name: 'TF Graph Model', predict: v => v })
+      resolve({
+        name: 'TF Graph Model',
+        predict: v => v,
+        execute: v => v,
+        outputs: [{ name: 'output_layer' }]
+      })
     ),
   loadLayersModel: () =>
     new Promise(resolve =>
-      resolve({ name: 'TF Layer Model', predict: v => v })
+      resolve({
+        name: 'TF Layer Model',
+        predict: v => v,
+        execute: v => v,
+        outputs: [{ name: 'output_layer' }]
+      })
     ),
   data: {
     ...tf.data,
