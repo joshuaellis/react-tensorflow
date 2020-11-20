@@ -32,7 +32,8 @@ export interface AttachWebcamOptions extends MediaStreamConstraints {
 
 export interface UsePredictionProps extends UseModelProps {
   predictConfig?: tf.ModelPredictConfig
-  usePredict?: boolean
+  useExecute?: boolean
+  outputName?: string
 }
 
 export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null

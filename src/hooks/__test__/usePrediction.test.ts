@@ -30,12 +30,12 @@ describe('usePrediction', () => {
   })
 
   it('should use .predict if a predict boolean is passed', async () => {
-    const mockPredict = jest.fn().mockImplementation(v => v)
+    const mockExecute = jest.fn().mockImplementation(v => v)
 
     const expected = tf.tensor([1, 2, 3, 4])
     const promise = new Promise(resolve =>
       resolve({
-        predict: mockPredict
+        execute: mockExecute
       })
     )
 
@@ -44,13 +44,14 @@ describe('usePrediction', () => {
         model: {
           load: async () => await promise
         },
-        usePredict: true
+        useExecute: true,
+        outputName: 'test'
       })
       arr[0].current = expected
       return arr
     })
 
     await waitForNextUpdate()
-    expect(mockPredict).toHaveBeenCalled()
+    expect(mockExecute).toHaveBeenCalled()
   })
 })

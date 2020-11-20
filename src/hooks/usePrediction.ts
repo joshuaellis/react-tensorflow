@@ -14,7 +14,8 @@ import useDataRef from './useDataRef'
 
 export default function usePrediction ({
   predictConfig,
-  usePredict,
+  useExecute,
+  outputName,
   ...props
 }: UsePredictionProps = {}): typeof PredictionReturn {
   const [prediction, setPrediction] = React.useState<Float32Array | null>(null)
@@ -25,7 +26,7 @@ export default function usePrediction ({
   React.useEffect(() => {
     if (model !== null && data !== null) {
       void Promise.resolve(
-        getPrediction(model, data, predictConfig, usePredict)
+        getPrediction(model, data, predictConfig, useExecute, outputName)
       )
         .then(
           async prediction =>
@@ -42,11 +43,12 @@ const getPrediction = (
   model: GraphModel | LayersModel,
   data: tf.Tensor,
   predictConfig?: tf.ModelPredictConfig,
-  usePredict = false
+  useExecute = false,
+  outputName = ''
 ): Prediction => {
-  if (predictConfig !== undefined || usePredict) {
-    return model.predict(data, predictConfig)
+  if (useExecute) {
+    return model.execute(data, outputName)
   } else {
-    return model.execute(data, model.outputs[0].name)
+    return model.predict(data, predictConfig)
   }
 }
