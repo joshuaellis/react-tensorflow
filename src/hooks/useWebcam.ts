@@ -14,6 +14,25 @@ export default function useWebcam (
   const [imageTensor, setImageTensor] = React.useState<tf.Tensor | null>(null)
   const videoRef = React.useRef<HTMLVideoElement | null>(null)
   const streamRef = React.useRef<MediaStream | null>(null)
+  const requestFramRef = React.useRef(0)
+
+  React.useEffect(() => {
+    return () => {
+      const { current: stream } = streamRef
+
+      cancelAnimationFrame(requestFramRef.current)
+      tfWebcam?.stop()
+
+      if (stream !== null) {
+        if (stream.getVideoTracks && stream.getAudioTracks) {
+          stream.getVideoTracks().map(track => track.stop())
+          stream.getAudioTracks().map(track => track.stop())
+        } else {
+          ((stream as unknown) as MediaStreamTrack).stop()
+        }
+      }
+    }
+  }, [tfWebcam])
 
   React.useEffect(() => {
     void Promise.resolve(attachWebcam(videoRef.current, args)).then(stream => {
@@ -22,13 +41,6 @@ export default function useWebcam (
     void Promise.resolve(getTensorflowWebcam(videoRef.current)).then(tfCam =>
       setTfWebcam(tfCam)
     )
-
-    return () => {
-      streamRef.current?.getTracks().forEach(track => track.stop())
-      if (videoRef.current !== null) {
-        videoRef.current.srcObject = null
-      }
-    }
   }, [videoRef])
 
   React.useEffect(() => {
@@ -44,15 +56,16 @@ export default function useWebcam (
         args?.width ?? video?.width,
         args?.height ?? video?.height
       )
-    ).then(tensor =>
-      requestAnimationFrame(() => {
-        setImageTensor((oldTensor) => {
-          if (oldTensor !== null) {
-            tf.dispose(oldTensor)
-          }
-          return tensor
+    ).then(tensor => {
+        requestFramRef.current = requestAnimationFrame(() => {
+          setImageTensor((oldTensor) => {
+            if (oldTensor !== null) {
+              tf.dispose(oldTensor)
+            }
+            return tensor
+          })
         })
-      })
+      }
     )
   }, [videoRef, tfWebcam, imageTensor])
 
