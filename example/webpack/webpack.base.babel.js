@@ -4,8 +4,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const __root = path.resolve(__dirname, '../')
 
-console.log(path.resolve(__root, './src/components/'))
-
 module.exports = options => ({
   mode: options.mode,
   entry: options.entry,

@@ -34,7 +34,8 @@
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "@typescript-eslint/indent": "off",
-    "no-void": "off"
+    "no-void": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off"
   },
   "settings": {
     "react": {
