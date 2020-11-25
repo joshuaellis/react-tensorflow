@@ -9,14 +9,16 @@ class ModelPredictor extends React.PureComponent {
   imgRef = React.createRef()
 
   state = {
-    prediction: []
+    prediction: [],
+    imgLoaded: false
   }
 
-  componentDidMount () {
+  componentDidUpdate (_, prevState) {
     const { model } = this.props
-    const { current: img} = imgRef
+    const { imgLoaded: currLoad } = this.state
+    const { imgLoaded: prevLoad } = prevState
 
-    if(model && img) {
+    if(model && currLoad && currLoad !== prevLoad) {
       this.createPrediction(model, img)
     }
   }
@@ -34,8 +36,12 @@ class ModelPredictor extends React.PureComponent {
     })
   }
 
+  handleImgLoad = () => this.setState({
+    imgLoaded: true
+  })
+
   render () {
-    return <img ref={imgRef} src={MY_IMAGE_PATH} />
+    return <img onLoad={this.handleImgLoad} ref={imgRef} src={MY_IMAGE_PATH} />
   }
 }
 

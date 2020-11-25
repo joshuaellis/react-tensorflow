@@ -13,10 +13,15 @@ import classify, { ClassifyReturn } from 'helpers/classify'
 
 export function PageClassifier ({ model }: { model: ModelInterface }) {
   const classes = useStyles()
+
   const imgRef = React.useRef<HTMLImageElement>(null!)
+
+  const [imgLoaded, setImgLoad] = React.useState<boolean>(false)
   const [prediction, setPrediction] = React.useState<ClassifyReturn | null>(
     null
   )
+
+  const handleImgLoad = () => setImgLoad(true)
 
   React.useEffect(() => {
     Prism.highlightAll()
@@ -36,12 +41,12 @@ export function PageClassifier ({ model }: { model: ModelInterface }) {
       return prediction
     }
 
-    if (model && img) {
+    if (model && img && img.width > 0 && img.height > 0) {
       Promise.resolve(getClassifications()).then(res =>
         requestAnimationFrame(() => setPrediction(res))
       )
     }
-  }, [model])
+  }, [model, imgLoaded])
 
   return (
     <main className={classes.root}>
@@ -69,6 +74,7 @@ export function PageClassifier ({ model }: { model: ModelInterface }) {
             Actual example
           </Typography>
           <img
+            onLoad={handleImgLoad}
             className={classes.exampleImage}
             ref={imgRef}
             src={'/public/images/hoc-honeybee.jpg'}
