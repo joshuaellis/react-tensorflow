@@ -41,13 +41,17 @@ const getImageFromWebcam = async (
 
   const img = await webcam.capture()
 
-  const processedImg = tf.tidy(() =>
-    processImage(resizeImage(width, height)(cropImage(img)))
-  )
+  if (img) {
+    const processedImg = tf.tidy(() =>
+      processImage(resizeImage(width, height)(cropImage(img)))
+    )
 
-  img.dispose()
+    img.dispose()
 
-  return processedImg
+    return processedImg
+  } else {
+    return null
+  }
 }
 
 export { resizeImage, processImage, cropImage, getImageFromWebcam }
