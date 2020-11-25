@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { screen, render, waitFor } from '@testing-library/react'
-// import * as tf from '@tensorflow/tfjs'
 
 import useWebcam, { getTensorflowWebcam } from '../useWebcam'
 
@@ -39,16 +38,14 @@ describe('useWebcam', () => {
   })
 
   it('should return a tensor the size of the video', async () => {
-    const expected: number[] = [1, 150, 150, 3]
-
     const VideoComponent: React.FC = () => {
       const [ref, tensor] = useWebcam()
 
       return (
         <div>
-          <video width={150} height={150} ref={ref} />
+          <video ref={ref} width={150} height={150} />
           {tensor !== null && (
-            <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>
+            <p data-testid='tfp-150'>{JSON.stringify(tensor?.shape)}</p>
           )}
         </div>
       )
@@ -56,16 +53,14 @@ describe('useWebcam', () => {
 
     render(<VideoComponent />)
 
-    await waitFor(() => expect(screen.getAllByTestId('tfp')))
+    await waitFor(() => expect(screen.getAllByTestId('tfp-150')))
 
-    expect(screen.getByTestId('tfp')).toHaveTextContent(
-      JSON.stringify(expected)
+    expect(screen.getByTestId('tfp-150')).toHaveTextContent(
+      JSON.stringify([1, 150, 150, 3])
     )
   })
 
   it('should return a tensor at a size of 75 x 75', async () => {
-    const expected: number[] = [1, 75, 75, 3]
-
     const VideoComponent: React.FC = () => {
       const [ref, tensor] = useWebcam({
         width: 75,
@@ -76,7 +71,7 @@ describe('useWebcam', () => {
         <div>
           <video width={150} height={150} ref={ref} />
           {tensor !== null && (
-            <p data-testid='tfp'>{JSON.stringify(tensor?.shape)}</p>
+            <p data-testid='tfp-75'>{JSON.stringify(tensor?.shape)}</p>
           )}
         </div>
       )
@@ -84,10 +79,10 @@ describe('useWebcam', () => {
 
     render(<VideoComponent />)
 
-    await waitFor(() => expect(screen.getAllByTestId('tfp')))
+    await waitFor(() => expect(screen.getAllByTestId('tfp-75')))
 
-    expect(screen.getByTestId('tfp')).toHaveTextContent(
-      JSON.stringify(expected)
+    expect(screen.getByTestId('tfp-75')).toHaveTextContent(
+      JSON.stringify([1, 75, 75, 3])
     )
   })
 

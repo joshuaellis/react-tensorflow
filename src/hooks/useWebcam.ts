@@ -3,7 +3,7 @@ import * as tf from '@tensorflow/tfjs'
 import { WebcamIterator } from '@tensorflow/tfjs-data/dist/iterators/webcam_iterator'
 
 import attachWebcam from 'helpers/attachWebcam'
-import { getImageFromWebcam } from 'helpers/image'
+import getImageFromWebcam from 'helpers/image'
 
 import { AttachWebcamOptions } from 'types/index'
 
@@ -43,11 +43,11 @@ export default function useWebcam (
   }, [videoRef])
 
   React.useEffect(() => {
-    if (tfWebcam === null && videoRef === null) {
+    const { current: video } = videoRef
+
+    if (tfWebcam === null && video === null) {
       return
     }
-
-    const { current: video } = videoRef
 
     void Promise.resolve(
       getImageFromWebcam(
