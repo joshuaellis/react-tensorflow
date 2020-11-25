@@ -5,12 +5,24 @@ export default function useDataRef (
   dataRef: React.MutableRefObject<tf.Tensor | null>
 ): tf.Tensor | null {
   const [data, setData] = React.useState<tf.Tensor | null>(null)
+  const current = dataRef.current
 
   React.useEffect(() => {
-    if (dataRef.current !== null && data !== dataRef.current) {
-      setData(dataRef.current)
+    return () => {
+      data?.dispose()
     }
-  }, [dataRef])
+  }, [])
+
+  React.useEffect(() => {
+    if (current && data !== current) {
+      setData(oldData => {
+        if (oldData) {
+          oldData.dispose()
+        }
+        return current
+      })
+    }
+  }, [current])
 
   return data
 }
