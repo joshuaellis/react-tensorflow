@@ -76,6 +76,6 @@ const sections = [
     title: 'So whats this app got?',
     body:
       "This app is contains samples of the hooks being used, it includes the code examples as well incase they're useful too. Currently we have the following hook examples:",
-    list: ['Higher-order Component', 'useClassified (with useWebcam)']
+    list: ['Higher-order Component', 'usePrediction (with useWebcam)']
   }
 ]

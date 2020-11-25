@@ -34,7 +34,7 @@ const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <ModelProvider url='https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_140_224/feature_vector/2/default/1'>
+        <ModelProvider url='https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_140_224/classification/3/default/1'>
           <ThemeProvider theme={theme}>
             <App />
           </ThemeProvider>

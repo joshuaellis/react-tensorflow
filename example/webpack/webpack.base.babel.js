@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const __root = path.resolve(__dirname, '../')
 
@@ -66,6 +67,13 @@ module.exports = options => ({
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'public/**/*'
+        }
+      ]
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     ...options.plugins

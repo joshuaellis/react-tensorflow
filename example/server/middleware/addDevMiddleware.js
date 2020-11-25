@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
+const express = require('express')
 
 function createWebpackMiddleware (compiler, publicPath) {
   return webpackDevMiddleware(compiler, {
@@ -16,6 +17,10 @@ module.exports = function addDevMiddlewares (app, webpackConfig) {
     webpackConfig.output.publicPath
   )
 
+  const publicPath = '/public'
+  const outputPath = compiler.outputPath
+
+  app.use(publicPath, express.static(outputPath))
   app.use(middleware)
   app.use(webpackHotMiddleware(compiler))
 
