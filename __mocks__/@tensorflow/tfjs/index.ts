@@ -1,14 +1,35 @@
-const tf = require('@tensorflow/tfjs')
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/promise-function-async */
+import * as tf from '@tensorflow/tfjs'
+
+const modelSharedProperties = {
+  predict: (v: any) => v,
+  execute: (v: any) => v,
+  outputs: [{ name: 'output_layer' }],
+  dispose: jest.fn()
+}
 
 module.exports = {
   ...tf,
+  dispose: jest.fn(),
   loadGraphModel: () =>
-    new Promise((res, _) => res({ name: 'TF Graph Model', predict: v => v })),
+    new Promise(resolve =>
+      resolve({
+        name: 'TF Graph Model',
+        ...modelSharedProperties
+      })
+    ),
   loadLayersModel: () =>
-    new Promise((res, _) => res({ name: 'TF Layer Model', predict: v => v })),
+    new Promise(resolve =>
+      resolve({
+        name: 'TF Layer Model',
+        ...modelSharedProperties
+      })
+    ),
   data: {
     ...tf.data,
     webcam: () => ({
+      stop: () => null,
       capture: () =>
         tf.tensor3d([
           [

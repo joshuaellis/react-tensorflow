@@ -1,14 +1,15 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, RenderResult } from '@testing-library/react'
 
-import { ReactTensorflow } from 'types/index'
+import { ModelProviderProps } from 'types/index'
 
 import ModelProvider from '../ModelProvider'
 
 const customRender = (
   ui: React.ReactNode,
-  providerProps?: ReactTensorflow.ModelProviderProps
-) => render(<ModelProvider {...providerProps}>{ui}</ModelProvider>)
+  providerProps?: ModelProviderProps
+): RenderResult =>
+  render(<ModelProvider {...providerProps}>{ui}</ModelProvider>)
 
 describe('ModelProvider', () => {
   it("should render it's children even if no url is provided", () => {

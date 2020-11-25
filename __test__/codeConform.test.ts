@@ -1,14 +1,18 @@
-import standardx from 'standardx'
+import { ESLint } from 'eslint'
 
-test('src conforms to standard', () => {
-  expect(
-    standardx.lintFiles(
-      ['src/*.js'],
-      {
-        cwd: '../',
-        parser: 'babel-eslint'
-      },
-      () => console.log('code conforms')
-    )
-  ).toBeUndefined()
+test('code conforms', async () => {
+  const eslint = new ESLint({ fix: true, cwd: process.cwd() })
+  const lintRes = await eslint.lintFiles(['./**/*.{js,jsx,ts,tsx}'])
+
+  const results = [...lintRes].filter(
+    ({
+      errorCount,
+      warningCount
+    }: {
+      errorCount: number
+      warningCount: number
+    }) => errorCount + warningCount > 0
+  )
+
+  expect(results).toEqual([])
 })

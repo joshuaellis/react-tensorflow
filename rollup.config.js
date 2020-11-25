@@ -30,7 +30,7 @@ export default {
     }),
     typescript({
       rollupCommonJSResolveHack: true,
-      exclude: '**/__test__/**',
+      exclude: ['**/__test__/**', 'scripts/*'],
       clean: true,
       typescript: require('typescript'),
       sourcemap: false

@@ -22,6 +22,13 @@
       "types/*": ["src/types/*"]
     }
   },
-  "include": ["__test__/*", "src/**/*", "decs.d.ts"],
+  "include": [
+    "__test__/*",
+    "src/**/*",
+    "decs.d.ts",
+    "__mocks__/**/*",
+    "*.config.js",
+    "scripts/*"
+  ],
   "exclude": ["node_modules", "coverage", "dist"]
 }

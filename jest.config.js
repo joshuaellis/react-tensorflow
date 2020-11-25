@@ -13,5 +13,9 @@ module.exports = {
   },
   moduleDirectories: ['node_modules', 'src'],
   coverageDirectory: './coverage/',
-  collectCoverage: true
+  collectCoverage: true,
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest'
+  },
+  setupFilesAfterEnv: ['./__test__/globalSetup.ts']
 }
