@@ -43,10 +43,10 @@ const MyModelComponent = () => {
 ### useModel
 
 ```js
-useModel(url?: string, opts?: { layers: boolean }): GraphModel | LayersModel | null
+useModel({model?: any, modelUrl?: string, layers?: boolean}): GraphModel | LayersModel | null
 ```
 
-If url is omitted useModel will look to find the ModelProvider as it's context for returning the model. When loading a model with this hook, the `opts.layers` boolean is passed if your TF model should be loaded with the function `tf.loadLayersModel` otherwise it is assumed the model should be loaded with `tf.loadGraphModel`.
+If `model` or `modelUrl` is omitted useModel will look to find the ModelProvider as it's context for returning the model. When loading a model with this hook, the `layers` boolean is passed if your TF model should be loaded with the function `tf.loadLayersModel` otherwise it is assumed the model should be loaded with `tf.loadGraphModel`.
 
 ### ModelProvider
 
@@ -82,11 +82,15 @@ Provides a ref to be used on a video element, the hook then returns a tensor wit
 
 ```js
 usePrediction (options?: {
-  modelUrl?: string
-}): [React.MutableRefObject, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
+  predictConfig?: {},
+  useExecute?: boolean = false,
+  outputName?: string,
+  predictionFunction?: string,
+  ...useModelProps,
+}): [React.MutableRefObject<tf.Tensor>, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
 ```
 
-Provides a ref to the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new Tensor as the prediction using either the model set with the `ModelProvider` component or by passing a url in the options argument as it uses `useModel` under the hood.
+Provides a ref to the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new tensor as the prediction using either the model set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses `useModel` under the hood. You can then perform different actions such as normalizing the data for to classify the original input. By default `usePrediction` uses `.predict`, if you want to force the use of `.execute` set `useExecute: true` and if you want to use a custom predict function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you must set `outputName`. At this time using a `@tensorflow-models` model is not supported with `usePrediction`.
 
 ## Contributing
 
