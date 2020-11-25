@@ -19,7 +19,6 @@ export default function useWebcam (
   React.useEffect(() => {
     return () => {
       const { current: stream } = streamRef
-
       cancelAnimationFrame(requestFramRef.current)
       tfWebcam?.stop()
 

@@ -5,7 +5,8 @@ import * as tf from '@tensorflow/tfjs'
 const modelSharedProperties = {
   predict: (v: any) => v,
   execute: (v: any) => v,
-  outputs: [{ name: 'output_layer' }]
+  outputs: [{ name: 'output_layer' }],
+  dispose: jest.fn()
 }
 
 module.exports = {
@@ -28,6 +29,7 @@ module.exports = {
   data: {
     ...tf.data,
     webcam: () => ({
+      stop: () => null,
       capture: () =>
         tf.tensor3d([
           [

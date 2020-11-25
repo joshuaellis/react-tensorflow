@@ -9,13 +9,17 @@ afterEach(() => {
 })
 
 describe('useWebcam', () => {
-  const mockGetTracks = jest.fn()
+  const trackMocks = [
+    {
+      stop: jest.fn()
+    }
+  ]
+  const mockGetVideoTracks = jest.fn().mockReturnValue(trackMocks)
+  const mockGetAudioTracks = jest.fn().mockReturnValue(trackMocks)
   const mock = jest.fn().mockImplementation(() => ({
-    getTracks: mockGetTracks.mockReturnValueOnce([
-      {
-        stop: jest.fn()
-      }
-    ])
+    stop: jest.fn(),
+    getVideoTracks: mockGetVideoTracks,
+    getAudioTracks: mockGetAudioTracks
   }))
 
   Object.defineProperty(navigator, 'mediaDevices', {
@@ -117,7 +121,8 @@ describe('useWebcam', () => {
 
     unmount()
 
-    expect(mockGetTracks).toHaveBeenCalled()
+    expect(mockGetAudioTracks).toHaveBeenCalled()
+    expect(mockGetVideoTracks).toHaveBeenCalled()
   })
 })
 
