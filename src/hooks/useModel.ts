@@ -31,7 +31,17 @@ export default function useModel ({
     } else if (modelObj !== undefined) {
       void loadNodeModel()
     }
+
+    return () => {
+      if (model) {
+        model.dispose()
+      }
+    }
   }, [modelUrl, modelObj])
 
-  return model ?? contextModel
+  if (!modelUrl && !modelObj) {
+    return contextModel
+  } else {
+    return model
+  }
 }
