@@ -1,15 +1,16 @@
-import { Tensor2D } from '@tensorflow/tfjs'
+import * as tf from '@tensorflow/tfjs'
 
 export type ClassifyReturn = Array<{ className: string; probability: number }>
 
 const classify = (
-  tensor: Tensor2D,
+  tensor: tf.Tensor2D,
   returnAmount: number,
   classes: { [classId: number]: string }
 ): ClassifyReturn => {
-  const softmax = tensor.slice([0, 1], [-1, 1000]).softmax()
-  const values = softmax.dataSync() as Int32Array
-  softmax.dispose()
+  const values = tf.tidy(() => {
+    const softmax = tensor.slice([0, 1], [-1, 1000]).softmax()
+    return softmax.dataSync() as Int32Array
+  })
 
   const valuesWithIndices: Array<{ value: number; index: number }> = []
   values.forEach((val, i) => {

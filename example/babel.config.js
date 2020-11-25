@@ -14,5 +14,16 @@ module.exports = {
       }
     ],
     '@babel/preset-typescript'
+  ],
+  plugins: [
+    [
+      'prismjs',
+      {
+        languages: ['javascript', 'jsx'],
+        plugins: ['line-numbers'],
+        theme: 'tomorrow',
+        css: true
+      }
+    ]
   ]
 }

@@ -13,7 +13,7 @@ import history from 'helpers/history'
 
 import App from 'containers/App'
 
-import 'references/styles/prism.css'
+// import 'references/styles/prism.css'
 
 import createStore from './configureStore'
 

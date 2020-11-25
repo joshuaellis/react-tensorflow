@@ -1,62 +1,62 @@
 import * as React from 'react'
 import clsx from 'clsx'
-import { Paper, Typography, makeStyles } from '@material-ui/core'
-import { withModel, ModelInterface } from 'react-tensorflow'
 import Prism from 'prismjs'
 import * as tf from '@tensorflow/tfjs'
+import { Paper, Typography, makeStyles } from '@material-ui/core'
+import { useWebcam, usePrediction } from 'react-tensorflow'
 
+import { predictionExample } from 'references/codeExamples'
 import { IMAGENET_CLASSES } from 'references/mobilenetHocClasses'
-import { hocExample } from 'references/codeExamples'
 
-import getTensorFromImg from 'helpers/getTensorFromImg'
 import classify, { ClassifyReturn } from 'helpers/classify'
 
-export function PageClassifier ({ model }: { model: ModelInterface }) {
+export default function PageClassifier () {
   const classes = useStyles()
-  const imgRef = React.useRef<HTMLImageElement>(null!)
-  const [prediction, setPrediction] = React.useState<ClassifyReturn | null>(
-    null
-  )
+  const [classification, setClassification] = React.useState<
+    ClassifyReturn | null
+  >(null)
 
   React.useEffect(() => {
     Prism.highlightAll()
   }, [])
 
+  const [videoRef, webcamTensor] = useWebcam({ width: 192, height: 192 })
+  const [dataRef, prediction] = usePrediction({
+    modelUrl:
+      'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_050_192/classification/3/default/1'
+  })
+
   React.useEffect(() => {
-    const { current: img } = imgRef
-
-    const getClassifications = async () => {
-      const tensor = getTensorFromImg(img)
-      const result = (await model?.predict(tensor)) as tf.Tensor2D
-      const prediction = classify(result, 1, IMAGENET_CLASSES)
-
-      tensor.dispose()
-      result.dispose()
-
-      return prediction
+    if (webcamTensor instanceof tf.Tensor) {
+      dataRef.current = webcamTensor.clone()
     }
+  }, [webcamTensor])
 
-    if (model && img) {
-      Promise.resolve(getClassifications()).then(res =>
-        requestAnimationFrame(() => setPrediction(res))
+  React.useEffect(() => {
+    if (prediction) {
+      const classifiedResult = classify(
+        prediction as tf.Tensor2D,
+        1,
+        IMAGENET_CLASSES
       )
+      setClassification(classifiedResult)
     }
-  }, [model])
+  }, [prediction])
 
   return (
     <main className={classes.root}>
       <article className={classes.regBp}>
         <header>
           <Typography color='textPrimary' component='h2' variant='h5'>
-            withModel HOC example
+            usePrediction & useWebcam example
           </Typography>
         </header>
         <section className={classes.section}>
           <Typography color='textPrimary' component='p' variant='body1'>
-            This example uses the withModel higher-order component, this
-            requires the use of the <code>ModelProvider</code> component to be
-            used. The model is <code>mobilenet_v2_140_224</code> model from{' '}
-            <code>tfhub</code>.
+            This example uses the useWecam hook to create tensors from the
+            user's camera, when this is returned we can pass it to usePrediction
+            hook that is currently running the mobilenet{' '}
+            <code>mobilenet_v2_050_192</code> model from <code>tfhub</code>.
           </Typography>
         </section>
         <section className={classes.section}>
@@ -68,19 +68,21 @@ export function PageClassifier ({ model }: { model: ModelInterface }) {
           >
             Actual example
           </Typography>
-          <img
-            className={classes.exampleImage}
-            ref={imgRef}
-            src={'/public/images/hoc-honeybee.jpg'}
+          <video
+            className={classes.video}
+            ref={videoRef}
+            width={560}
+            height={420}
           />
           <Paper className={classes.prediction} elevation={0}>
-            {prediction ? (
+            {classification ? (
               <>
                 <Typography color='textPrimary' component='p' variant='body1'>
-                  Prediction: {prediction[0].className}
+                  Prediction: {classification[0].className}
                 </Typography>
                 <Typography color='textPrimary' component='p' variant='body1'>
-                  Probability: {Math.floor(prediction[0].probability * 100)}%
+                  Probability: {Math.floor(classification[0].probability * 100)}
+                  %
                 </Typography>
               </>
             ) : (
@@ -97,9 +99,19 @@ export function PageClassifier ({ model }: { model: ModelInterface }) {
           >
             Code example
           </Typography>
+          <Typography
+            className={classes.sectionHead}
+            color='textPrimary'
+            component='p'
+            variant='body1'
+          >
+            Due to memory disposal in <code>@tensorflow/tfjs</code> when setting
+            the <code>dataRef</code> provided by <code>usePrediction</code> you
+            should use the <code>.clone()</code> method on the tensor
+          </Typography>
           <Paper className={classes.codeExample}>
             <pre>
-              <code className='lang-jsx'>{hocExample}</code>
+              <code className='lang-jsx'>{predictionExample}</code>
             </pre>
           </Paper>
         </section>
@@ -108,9 +120,7 @@ export function PageClassifier ({ model }: { model: ModelInterface }) {
   )
 }
 
-export default withModel(PageClassifier)
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     padding: '2.4rem 4rem'
   },
@@ -140,5 +150,9 @@ const useStyles = makeStyles(theme => ({
   },
   sectionHead: {
     marginBottom: '12px'
+  },
+  video: {
+    width: '100%',
+    margin: '0 auto'
   }
 }))

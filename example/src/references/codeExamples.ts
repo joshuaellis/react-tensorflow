@@ -44,20 +44,38 @@ export default withModel(ModelPredictor)
 
 export const predictionExample = `import * as React from 'react'
 import { usePrediction, useWebcam } from 'react-tensorflow'
-import * as mobilenet from '@tensorflow-models/mobilenet'
+
+import classes from '../my-classes'
+
+import { classify } from '../helpers'
 
 export default Predictor () {
-  const [ videoRef, webcamTensor ] = useWebcam({ height: 244, width: 244 })
-  const [ dataRef, prediction ] = usePrediction({ model: mobilenet })
+  const [classification, setClassification] = React.useState(null)
+
+  const [ videoRef, webcamTensor ] = useWebcam({ height: 192, width: 192 })
+  const [ dataRef, prediction ] = usePrediction({ modelUrl:
+    'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_050_192/classification/3/default/1' })
 
   React.useEffect(() => {
-    dataRef.current = webcamTensor
+    dataRef.current = webcamTensor?.clone()
   }, [webcamTensor])
+
+  React.useEffect(() => {
+    if (prediction) {
+      const classifiedResult = classify(
+        prediction,
+        1,
+        classes
+      )
+      setClassification(classifiedResult)
+    }
+  }, [prediction])
   
   return (
     <div>
-      <video ref={videoRef} width={299} height={299} />
-      <h1>{prediction[0].result}</h1>
+      <video ref={videoRef} />
+      <h1>{classification[0].className}</h1>
+      <h2>{Math.floor(classification[0].probability * 100)}</h2>
     </div>
   )
 }`
