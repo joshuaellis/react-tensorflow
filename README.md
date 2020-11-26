@@ -32,7 +32,7 @@ npm i react-tensorflow -S
 import { useModel } from 'react-tensorflow'
 
 const MyModelComponent = () => {
-  const model = useModel(`${PATH_TO_MODEL}`)
+  const model = useModel({ modelUrl: `${PATH_TO_MODEL}` })
 
   // ...do something with the model
 
@@ -75,7 +75,7 @@ useWebcam (options?: {
     width?: number
     height?: number
     facingMode?: string
-  }): [React.MutableRefObject, tf.Tensor | null]
+  }): [React.MutableRefObject<HTMLVideoElement>, tf.Tensor | null]
 ```
 
 Provides a ref to be used on a video element, the hook then returns a tensor with shape `[1, width, height, 3]` where the width and height are either dictated by the element's width & height or the provided argument documented above. The options argument while documented above can infact take all the properties of the [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints).
@@ -88,11 +88,14 @@ usePrediction (options?: {
   useExecute?: boolean = false,
   outputName?: string,
   predictionFunction?: string,
-  ...useModelProps,
+  modelUrl?: string,
+  layers?: boolean,
 }): [React.MutableRefObject<tf.Tensor>, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
 ```
 
-Provides a ref to the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new tensor as the prediction using either the model set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses `useModel` under the hood. You can then perform different actions such as normalizing the data for to classify the original input. By default `usePrediction` uses `.predict`, if you want to force the use of `.execute` set `useExecute: true` and if you want to use a custom predict function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you must set `outputName`. At this time using a `@tensorflow-models` model is not supported with `usePrediction`.
+Provides a ref to the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new tensor as the prediction using either the model set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses `useModel` under the hood. You can then perform different actions such as normalizing the data for to classify the original input. By default `usePrediction` uses `.predict`, if you want to force the use of `.execute` set `useExecute: true` and if you want to use a custom predict function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you must set `outputName`.
+
+:no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript errors if the model predicition method is called or will simply return null because the model either does not have an execute or predict function or it does, and it has not returned a Tensor. :no_entry_sign:
 
 ## Contributing
 

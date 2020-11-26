@@ -34,7 +34,6 @@ export interface UsePredictionProps extends UseModelProps {
   predictConfig?: tf.ModelPredictConfig
   useExecute?: boolean
   outputName?: string
-  predictionFunction?: string
 }
 
 export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null
