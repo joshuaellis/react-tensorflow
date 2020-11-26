@@ -21,6 +21,7 @@ export default function usePrediction ({
   const [prediction, setPrediction] = React.useState<Prediction>(null)
   const [predictionFault, setPredictionFault] = React.useState<boolean>(false)
   const dataRef = React.useRef<tf.Tensor | null>(null)
+  const requestFramRef = React.useRef(0)
 
   const model = useModel({ ...props })
   const data = useDataRef(dataRef)
@@ -35,11 +36,18 @@ export default function usePrediction ({
   )
 
   React.useEffect(() => {
+    return () => {
+      cancelAnimationFrame(requestFramRef.current)
+      void (prediction as tf.Tensor)?.dispose()
+    }
+  }, [prediction])
+
+  React.useEffect(() => {
     if (model && data && !predictionFault) {
       try {
         const prediction = predictFunc(data)
 
-        requestAnimationFrame(() =>
+        requestFramRef.current = requestAnimationFrame(() =>
           setPrediction(oldPrediction => {
             if (oldPrediction && oldPrediction instanceof tf.Tensor) {
               oldPrediction.dispose()
