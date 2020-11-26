@@ -12,11 +12,10 @@ import {
 import useModel from './useModel'
 import useDataRef from './useDataRef'
 
-export function usePrediction ({
+export default function usePrediction ({
   predictConfig,
   useExecute,
   outputName,
-  predictionFunction,
   ...props
 }: UsePredictionProps = {}): typeof PredictionReturn {
   const [prediction, setPrediction] = React.useState<Prediction>(null)
@@ -30,10 +29,9 @@ export function usePrediction ({
     getPrediction(model, {
       useExecute,
       outputName,
-      predictConfig,
-      predictionFunction
+      predictConfig
     }),
-    [model, useExecute, outputName, predictConfig, predictionFunction]
+    [model, useExecute, outputName, predictConfig]
   )
 
   React.useEffect(() => {
@@ -59,23 +57,13 @@ export function usePrediction ({
   return [dataRef, prediction]
 }
 
-export default usePrediction
-
-export const getPrediction = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  model: GraphModel | LayersModel | any,
-  {
-    predictConfig,
-    useExecute = false,
-    outputName = '',
-    predictionFunction
-  }: UsePredictionProps
+const getPrediction = (
+  model: GraphModel | LayersModel | null,
+  { predictConfig, useExecute = false, outputName = '' }: UsePredictionProps
 ) => (data: tf.Tensor): Prediction => {
-  if (predictionFunction !== undefined && model[predictionFunction]) {
-    return model[predictionFunction](data)
-  } else if (useExecute && model.execute) {
+  if (useExecute && model?.execute) {
     return model.execute(data, outputName)
-  } else if (model.predict !== undefined) {
+  } else if (model?.predict) {
     return model.predict(data, predictConfig)
   } else {
     throw new Error('model does not have prediction function')
