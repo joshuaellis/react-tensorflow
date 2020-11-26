@@ -53,7 +53,7 @@ export default function PageClassifier () {
         </header>
         <section className={classes.section}>
           <Typography color='textPrimary' component='p' variant='body1'>
-            This example uses the useWecam hook to create tensors from the
+            This example uses the useWebcam hook to create tensors from the
             user's camera, when this is returned we can pass it to usePrediction
             hook that is currently running the mobilenet{' '}
             <code>mobilenet_v2_050_192</code> model from <code>tfhub</code>.
