@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { screen, render, waitFor } from '@testing-library/react'
+import { screen, render, waitFor, act } from '@testing-library/react'
 
 import useWebcam, { getTensorflowWebcam } from '../useWebcam'
 
@@ -86,22 +86,6 @@ describe('useWebcam', () => {
     )
   })
 
-  // it('should dispose of the old tensor when replacing the new tensor in state', async () => {
-  //   const disposeSpy = jest.spyOn(tf, 'dispose')
-  //   const requestAnimationSpy = jest.spyOn(global, 'requestAnimationFrame')
-
-  //   const VideoComponent: React.FC = () => {
-  //     const [ref] = useWebcam()
-  //     return <video width={150} height={150} ref={ref} />
-  //   }
-
-  //   render(<VideoComponent />)
-
-  //   await waitFor(() => expect(requestAnimationSpy).toHaveBeenCalled())
-
-  //   expect(disposeSpy).toHaveBeenCalled()
-  // })
-
   it('should clear stream tracks when unmounted', async () => {
     const requestAnimationSpy = jest.spyOn(global, 'requestAnimationFrame')
 
@@ -114,7 +98,9 @@ describe('useWebcam', () => {
 
     await waitFor(() => expect(requestAnimationSpy).toHaveBeenCalled())
 
-    unmount()
+    act(() => {
+      unmount()
+    })
 
     expect(mockGetAudioTracks).toHaveBeenCalled()
     expect(mockGetVideoTracks).toHaveBeenCalled()
