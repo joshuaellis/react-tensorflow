@@ -20,8 +20,14 @@ export type ModelInterface = GraphModel | LayersModel | null
 
 export interface ModelProviderProps {
   url?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model?: any
   children?: React.ReactNode
   layerModel?: boolean
+}
+
+export interface ModelProviderState {
+  model: ModelInterface
 }
 
 export interface AttachWebcamOptions extends MediaStreamConstraints {
