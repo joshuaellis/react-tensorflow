@@ -1,10 +1,11 @@
 import * as React from 'react'
+import { waitFor } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
-import * as cocoSSD from '@tensorflow-models/coco-ssd'
 
 import ModelProvider from 'components/ModelProvider'
 
 import useModel from '../useModel'
+import { modelFailedLoad } from 'references/errors'
 
 describe('useModel Hook', () => {
   const acceptedModelUrls = [
@@ -18,7 +19,11 @@ describe('useModel Hook', () => {
     './../../model/model.json'
   ]
 
-  jest.spyOn(console, 'error')
+  const errorSpy = jest.spyOn(console, 'error')
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
   acceptedModelUrls.forEach(url => {
     test(`Returns model using ${url}`, async () => {
@@ -28,6 +33,7 @@ describe('useModel Hook', () => {
       expect(result.current).toBeNull()
       await waitForNextUpdate()
       expect(result.current).toMatchObject({ name: 'TF Graph Model' })
+      expect(errorSpy).not.toHaveBeenCalled()
     })
   })
 
@@ -35,7 +41,7 @@ describe('useModel Hook', () => {
     test(`Won't return model using ${url}`, () => {
       const { result } = renderHook(() => useModel({ modelUrl: url }))
       expect(result.current).toBeNull()
-      expect(console.error).toHaveBeenCalledTimes(i + 1)
+      expect(errorSpy).toHaveBeenCalled()
     })
   })
 
@@ -46,6 +52,7 @@ describe('useModel Hook', () => {
     expect(result.current).toBeNull()
     await waitForNextUpdate()
     expect(result.current).toMatchObject({ name: 'TF Layer Model' })
+    expect(errorSpy).not.toHaveBeenCalled()
   })
 
   test('If not passed a model, the model should use the Model Context', async () => {
@@ -63,20 +70,49 @@ describe('useModel Hook', () => {
     expect(result.current).toBeNull()
     await waitForNextUpdate()
     expect(result.current).toMatchObject({ name: 'TF Graph Model' })
+    expect(errorSpy).not.toHaveBeenCalled()
   })
 
   test('it should accept a node_module model', async () => {
-    const cocoSpy = jest
-      .spyOn(cocoSSD, 'load')
-      .mockImplementation(
-        async () => await new Promise(resolve => resolve(undefined))
-      )
+    const promise = new Promise(resolve =>
+      resolve({
+        dispose: jest.fn()
+      })
+    )
+
+    const model = {
+      load: async () => await promise
+    }
+
+    const loadSpy = jest.spyOn(model, 'load')
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useModel({ model: cocoSSD })
+      useModel({
+        model
+      })
     )
     expect(result.current).toBe(null)
     await waitForNextUpdate()
-    expect(cocoSpy).toBeCalled()
+    expect(loadSpy).toBeCalled()
+  })
+
+  test('it should print an error if it fails to load the model', async () => {
+    const { result } = renderHook(() =>
+      useModel({
+        model: {
+          load: async () => await new Promise(resolve => resolve(undefined))
+        }
+      })
+    )
+
+    expect(result.current).toBe(null)
+    await waitFor(() => expect(errorSpy).toHaveBeenCalled())
+    expect(errorSpy).toBeCalledWith(modelFailedLoad('useModel'))
+  })
+
+  test("if there's no model available at all, it should print an error", () => {
+    renderHook(() => useModel())
+
+    expect(errorSpy).toHaveBeenCalled()
   })
 })

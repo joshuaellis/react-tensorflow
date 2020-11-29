@@ -3,3 +3,6 @@ export const noModelError = (componentName: string): string =>
 
 export const modelFailedLoad = (componentName: string): string =>
   `Model failed to load in ${componentName}`
+
+export const noProviderAvailable = (componentName: string): string =>
+  `No ModelProvider found for ${componentName}`

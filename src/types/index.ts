@@ -16,6 +16,10 @@ export interface LoadOptionsType {
   layers?: boolean
 }
 
+export type ModelContext = {
+  model: ModelInterface
+} | null
+
 export type ModelInterface = GraphModel | LayersModel | null
 
 export interface ModelProviderProps {

@@ -14,7 +14,7 @@ export default class ModelProvider extends React.PureComponent<
   ModelProviderState
 > {
   state = {
-    model: undefined
+    model: null
   }
 
   componentDidMount (): void {
@@ -88,6 +88,6 @@ export default class ModelProvider extends React.PureComponent<
     const { children } = this.props
     const { model } = this.state
 
-    return <ModelCtx.Provider value={model}>{children}</ModelCtx.Provider>
+    return <ModelCtx.Provider value={{ model }}>{children}</ModelCtx.Provider>
   }
 }

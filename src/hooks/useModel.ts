@@ -1,8 +1,10 @@
 import * as React from 'react'
 
-import { UseModelProps, ModelInterface } from 'types/index'
+import { UseModelProps, ModelInterface, LoadOptionsType } from 'types/index'
 
 import loadModel from 'helpers/loadModel'
+
+import { noModelError, modelFailedLoad } from 'references/errors'
 
 import ModelCtx from 'components/ModelContext'
 
@@ -12,24 +14,20 @@ export default function useModel ({
   ...opts
 }: UseModelProps = {}): ModelInterface {
   const [model, setModel] = React.useState<ModelInterface>(null)
+  const [err, setErr] = React.useState(false)
 
-  const contextModel = React.useContext(ModelCtx)
+  const ctx = React.useContext(ModelCtx)
+
+  if (!ctx && !modelUrl && !modelObj && !err) {
+    console.error(noModelError('useModel'))
+    setErr(true)
+  }
 
   React.useEffect(() => {
-    const getModel = async (): Promise<void> => {
-      const loadedModel = await loadModel(modelUrl, opts)
-      setModel(loadedModel)
-    }
-
-    const loadNodeModel = async (): Promise<void> => {
-      const loadedModel = await modelObj.load()
-      setModel(loadedModel)
-    }
-
-    if (modelUrl !== undefined) {
-      void getModel()
-    } else if (modelObj !== undefined) {
-      void loadNodeModel()
+    if (!err && (modelUrl ?? modelObj)) {
+      void Promise.resolve(
+        getModel(modelUrl ?? modelObj, opts, !modelUrl)
+      ).then(loadedModel => setModel(loadedModel))
     }
 
     return () => {
@@ -37,11 +35,36 @@ export default function useModel ({
         model.dispose()
       }
     }
-  }, [modelUrl, modelObj])
+  }, [modelUrl, modelObj, err])
 
-  if (!modelUrl && !modelObj) {
-    return contextModel
+  if (!modelUrl && !modelObj && ctx) {
+    return ctx.model
   } else {
     return model
+  }
+}
+
+const getModel = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model: string | any,
+  opts: LoadOptionsType,
+  pkg = false
+): Promise<ModelInterface> => {
+  try {
+    let loadedModel = null
+    if (pkg) {
+      loadedModel = await model.load()
+    } else {
+      loadedModel = await loadModel(model, opts)
+    }
+
+    if (!loadedModel) {
+      throw new Error(modelFailedLoad('useModel'))
+    }
+
+    return loadedModel
+  } catch (err) {
+    console.error(err.message)
+    return null
   }
 }
