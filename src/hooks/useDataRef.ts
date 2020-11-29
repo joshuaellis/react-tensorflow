@@ -9,9 +9,11 @@ export default function useDataRef (
 
   React.useEffect(() => {
     return () => {
-      data?.dispose()
+      if (data) {
+        tf.dispose(data)
+      }
     }
-  }, [])
+  }, [data])
 
   React.useEffect(() => {
     if (current && data !== current) {

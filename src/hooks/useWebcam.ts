@@ -7,7 +7,7 @@ import getImageFromWebcam from 'helpers/image'
 
 import { AttachWebcamOptions } from 'types/index'
 
-import {webcamGetFailed} from 'references/errors'
+import { webcamGetFailed } from 'references/errors'
 
 export default function useWebcam (
   args?: AttachWebcamOptions

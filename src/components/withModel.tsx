@@ -17,11 +17,10 @@ const withModel = <T extends WithModelProps = WithModelProps>(
   ): JSX.Element => (
     <ModelCtx.Consumer>
       {ctx => {
-        const doesContextExist = Boolean(ctx)
-        if (!doesContextExist) {
+        if (!ctx) {
           throw new Error(noProviderAvailable('withModel'))
         }
-        return <Component {...(props as T)} model={ctx?.model} />
+        return <Component {...(props as T)} model={ctx.model} />
       }}
     </ModelCtx.Consumer>
   )

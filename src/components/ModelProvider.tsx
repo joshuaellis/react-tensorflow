@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react'
 
@@ -30,8 +31,8 @@ export default class ModelProvider extends React.PureComponent<
     } = this.props
 
     if (
-      (currUrl && currUrl !== prevUrl) ??
-      (currUrl && prevLayers !== currLayers) ??
+      (currUrl && currUrl !== prevUrl) ||
+      (currUrl && prevLayers !== currLayers) ||
       (currModel && currModel !== prevModel)
     ) {
       void this.loadContextModel()

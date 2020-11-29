@@ -27,7 +27,17 @@ describe('ModelProvider', () => {
     expect(errorSpy).toHaveBeenCalledWith(noModelError('ModelProvider'))
   })
 
-  it("should render it's children and log an error if the model fails to load", async () => {
+  it("should render it's children and log an error if the model fails to load with a url", async () => {
+    customRender(<h1>Hello World</h1>, {
+      url: 'abc'
+    })
+
+    expect(screen.getByText('Hello World')).toBeTruthy()
+    await waitFor(() => expect(errorSpy).toHaveBeenCalled())
+    expect(errorSpy).toHaveBeenCalledWith(modelFailedLoad('ModelProvider'))
+  })
+
+  it("should render it's children and log an error if the model fails to load with a pkg model", async () => {
     const promise = new Promise(resolve => resolve(undefined))
 
     customRender(<h1>Hello World</h1>, {
