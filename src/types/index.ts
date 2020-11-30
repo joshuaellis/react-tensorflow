@@ -48,4 +48,21 @@ export interface UsePredictionProps extends UseModelProps {
 
 export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null
 
-export let PredictionReturn: [React.MutableRefObject<tf.Tensor | null>, Prediction]
+export type setDataRef = (data: tf.Tensor) => void
+
+export let PredictionReturn: [setDataRef, Prediction]
+
+export interface UseClassifierProps extends UsePredictionProps {
+  returns?: number
+  classes?: { [classId: number]: string }
+}
+
+export type ClassifiedResults = Array<{class: string, probability: number}>
+
+export type NonClassifiedResults = Array<{class: number, probability: number}>
+
+export type Classification = ClassifiedResults | NonClassifiedResults | null
+
+export let ClassificationReturn: [setDataRef, Classification]
+
+export let UseDataRefReturn: [tf.Tensor | null, setDataRef]
