@@ -1,11 +1,11 @@
 name: Coverage
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,3 +19,11 @@ jobs:
           # Path to coverage file to upload
           file: ./coverage/coverage-final.json
           fail_ci_if_error: true
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dep
+        run: yarn install
+      - name: build package
+        run: yarn build
