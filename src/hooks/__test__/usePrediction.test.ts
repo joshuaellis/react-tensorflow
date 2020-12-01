@@ -128,6 +128,7 @@ describe('usePrediction', () => {
     })
 
     expect(disposeSpy).not.toHaveBeenCalled()
+    expect(requestAnimSpy).toHaveBeenCalledTimes(1)
   })
 
   it('should dispose of the tensor and cancel the animation frame on unmount', async () => {
