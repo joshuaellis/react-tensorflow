@@ -138,16 +138,13 @@ describe('useClassifier', () => {
     })
 
     await waitFor(() => expect(result.current[1]).not.toBeNull())
-    console.log('asseting initial mock data')
     expect(result.current[1]).toEqual(expectedReturn)
 
     void act(() => {
-      console.log('changing that mock data')
       result.current[0](tf.tensor([0.12351241, 12.141463461, -1.123123]))
     })
 
     await waitFor(() => expect(result.current[1]).not.toEqual(expectedReturn))
-    console.log('asseting changed mock data')
     expect(result.current[1]).toEqual([
       {
         class: 1,

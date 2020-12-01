@@ -110,7 +110,7 @@ describe('useWebcam', () => {
 describe('getTensorflowWebcam', () => {
   it('should throw an error if passed no element', async () => {
     void expect(getTensorflowWebcam(null)).rejects.toThrowError(
-      'Failed to pass element to react-tensorflow/getTensorflowWebcam'
+      'Failed to pass webcam element to useWebcam'
     )
   })
 })
