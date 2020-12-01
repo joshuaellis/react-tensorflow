@@ -1,0 +1,21 @@
+name: Coverage
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dep
+        run: yarn install
+      - name: run test
+        run: yarn test
+      - name: Codecov upload
+        uses: codecov/codecov-action@v1.0.15
+        with:
+          # Path to coverage file to upload
+          file: ./coverage/coverage-final.json
+          fail_ci_if_error: true
