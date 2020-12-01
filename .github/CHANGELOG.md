@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0 - 2020-12-01
+
+### Added
+
+- useClassifer hook
+
+### Fixed
+
+- useDataRef was not updating when ref updated (#23)
+
+### Changed
+
+- ModelProvider is now a class component
+- Error handling across the various functions
+  - ModelProvider & useModel report errors in model loading
+  - withModel & useModel report errors when no model is available
+  - Errors are no in one file `references/errors.ts`
+- Updated example application to use useClassify hook
+
+### Removed
+
+- `prism.css` inside example app
+
 ## 1.0.1 - 2020-11-26
 
 ### Fixed
