@@ -13,14 +13,15 @@ import usePrediction from './usePrediction'
 export default function useClassifier ({
   returns = 5,
   classes,
-  ...props
+  modelUrl,
+  layers
 }: UseClassifierProps = {}): typeof ClassificationReturn {
   const [classifications, setClassifications] = React.useState<Classification>(
     null
   )
   const requestFramRef = React.useRef(0)
 
-  const [dataRef, prediction] = usePrediction({ ...props })
+  const [setDataRef, prediction] = usePrediction({ modelUrl, layers })
 
   const classify = React.useCallback(
     (tensor: Prediction): Classification => {
@@ -65,5 +66,5 @@ export default function useClassifier ({
     }
   }, [prediction])
 
-  return [dataRef, classifications]
+  return [setDataRef, classifications]
 }
