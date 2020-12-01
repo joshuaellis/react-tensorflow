@@ -68,8 +68,8 @@ const items = [
     href: '/hoc'
   },
   {
-    title: 'Prediction',
+    title: 'Classifier',
     icon: <ClassIcon />,
-    href: '/predictor'
+    href: '/classifier'
   }
 ]

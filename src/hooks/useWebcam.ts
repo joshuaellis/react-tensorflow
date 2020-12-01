@@ -7,6 +7,8 @@ import getImageFromWebcam from 'helpers/image'
 
 import { AttachWebcamOptions } from 'types/index'
 
+import { webcamGetFailed } from 'references/errors'
+
 export default function useWebcam (
   args?: AttachWebcamOptions
 ): [React.MutableRefObject<HTMLVideoElement | null>, tf.Tensor | null] {
@@ -77,7 +79,7 @@ export const getTensorflowWebcam = async (
   try {
     if (elem === null) {
       throw new Error(
-        'Failed to pass element to react-tensorflow/getTensorflowWebcam'
+        webcamGetFailed('useWebcam')
       )
     } else {
       const webcam = await tf.data.webcam(elem)

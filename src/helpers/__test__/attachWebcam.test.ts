@@ -1,3 +1,5 @@
+import { webcamGetFailed } from 'references/errors'
+
 import attachWebcam from '../attachWebcam'
 
 describe('attachWebcam', () => {
@@ -13,7 +15,9 @@ describe('attachWebcam', () => {
         getUserMedia: getUserMediaMock
       })
     })
-    await expect(attachWebcam(null)).rejects.toThrow('No video element passed')
+    await expect(attachWebcam(null)).rejects.toThrow(
+      webcamGetFailed('useWebcam')
+    )
   })
 
   it('should pass arguments to getUserMedia', async () => {

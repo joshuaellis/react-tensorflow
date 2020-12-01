@@ -19,6 +19,7 @@
       "components/*": ["src/components/*"],
       "helpers/*": ["src/helpers/*"],
       "hooks/*": ["src/hooks/*"],
+      "references/*": ["src/references/*"],
       "types/*": ["src/types/*"]
     }
   },

@@ -16,12 +16,22 @@ export interface LoadOptionsType {
   layers?: boolean
 }
 
+export type ModelContext = {
+  model: ModelInterface
+} | null
+
 export type ModelInterface = GraphModel | LayersModel | null
 
 export interface ModelProviderProps {
   url?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model?: any
   children?: React.ReactNode
   layerModel?: boolean
+}
+
+export interface ModelProviderState {
+  model: ModelInterface
 }
 
 export interface AttachWebcamOptions extends MediaStreamConstraints {
@@ -38,4 +48,21 @@ export interface UsePredictionProps extends UseModelProps {
 
 export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null
 
-export let PredictionReturn: [React.MutableRefObject<tf.Tensor | null>, Prediction]
+export type setDataRef = (data: tf.Tensor) => void
+
+export let PredictionReturn: [setDataRef, Prediction]
+
+export interface UseClassifierProps extends UsePredictionProps {
+  returns?: number
+  classes?: { [classId: number]: string }
+}
+
+export type ClassifiedResults = Array<{class: string, probability: number}>
+
+export type NonClassifiedResults = Array<{class: number, probability: number}>
+
+export type Classification = ClassifiedResults | NonClassifiedResults | null
+
+export let ClassificationReturn: [setDataRef, Classification]
+
+export let UseDataRefReturn: [tf.Tensor | null, setDataRef]

@@ -90,12 +90,25 @@ usePrediction (options?: {
   predictionFunction?: string,
   modelUrl?: string,
   layers?: boolean,
-}): [React.MutableRefObject<tf.Tensor>, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
+}): [(data: tf.Tensor) => void, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
 ```
 
-Provides a ref to the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new tensor as the prediction using either the model set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses `useModel` under the hood. You can then perform different actions such as normalizing the data for to classify the original input. By default `usePrediction` uses `.predict`, if you want to force the use of `.execute` set `useExecute: true` and if you want to use a custom predict function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you must set `outputName`.
+Provides a function to set the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new tensor as the prediction using either the model set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses `useModel` under the hood. You can then perform different actions such as normalizing the data for to classify the original input. By default `usePrediction` uses `.predict`, if you want to force the use of `.execute` set `useExecute: true` and if you want to use a custom predict function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you must set `outputName`.
 
 :no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript errors if the model predicition method is called or will simply return null because the model either does not have an execute or predict function or it does, and it has not returned a Tensor. :no_entry_sign:
+
+### useClassifier
+
+```js
+useClassifer(options?: {
+  classes?: {},
+  returns?: number,
+  modelUrl?: string,
+  layers?: boolean,
+}): [(data: tf.Tensor) => void, Array<{class: number, probability: number}>, Array<{class: string, probability: number}>, null]
+```
+
+uses `usePrediction` under the hood so it provides a function to set the data, it must be in the form of a tensor. It then returns an array of classifications (be default, the array will have length 5). If the classes argument is provided, the class key in the returned array will be the class at the index of the prediction.
 
 ## Contributing
 

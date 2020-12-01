@@ -85,3 +85,30 @@ export default Predictor () {
     </div>
   )
 }`
+
+export const classificationExample = `import * as React from 'react'
+import { useClassifier, useWebcam } from 'react-tensorflow'
+
+import classes from '../my-classes'
+
+export default Predictor () {
+  const [ videoRef, webcamTensor ] = useWebcam({ height: 192, width: 192 })
+  const [ setDataRef, classification ] = useClassifier({ 
+    modelUrl:
+      'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_050_192/classification/3/default/1',
+    returns: 1,
+    classes
+   })
+
+  React.useEffect(() => {
+    setDateRef(webcamTensor?.clone())
+  }, [webcamTensor])
+  
+  return (
+    <div>
+      <video ref={videoRef} />
+      <h1>{classification[0].className}</h1>
+      <h2>{Math.floor(classification[0].probability * 100)}</h2>
+    </div>
+  )
+}`

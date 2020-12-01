@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { noProviderAvailable } from 'references/errors'
 
 import { ModelInterface } from 'types/index'
 
@@ -15,7 +16,12 @@ const withModel = <T extends WithModelProps = WithModelProps>(
     props: Omit<T, keyof WithModelProps>
   ): JSX.Element => (
     <ModelCtx.Consumer>
-      {model => <Component {...(props as T)} model={model} />}
+      {ctx => {
+        if (!ctx) {
+          throw new Error(noProviderAvailable('withModel'))
+        }
+        return <Component {...(props as T)} model={ctx.model} />
+      }}
     </ModelCtx.Consumer>
   )
 

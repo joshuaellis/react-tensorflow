@@ -1,5 +1,7 @@
 import { AttachWebcamOptions } from 'types/index'
 
+import { noWebcamAvailable, webcamGetFailed } from 'references/errors'
+
 const attachWebcam = async (
   elem: HTMLVideoElement | null,
   opts?: AttachWebcamOptions
@@ -7,10 +9,10 @@ const attachWebcam = async (
   try {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error('No camera available')
+      throw new Error(noWebcamAvailable('useWebcam'))
     }
     if (elem === null) {
-      throw new Error('No video element passed')
+      throw new Error(webcamGetFailed('useWebcam'))
     }
 
     const defaults: AttachWebcamOptions = {

@@ -3,52 +3,40 @@ import clsx from 'clsx'
 import Prism from 'prismjs'
 import * as tf from '@tensorflow/tfjs'
 import { Paper, Typography, makeStyles } from '@material-ui/core'
-import { useWebcam, usePrediction } from 'react-tensorflow'
+import { useWebcam, useClassifier } from 'react-tensorflow'
 
-import { predictionExample } from 'references/codeExamples'
+import { classificationExample } from 'references/codeExamples'
 import { IMAGENET_CLASSES } from 'references/mobilenetHocClasses'
 
 import classify, { ClassifyReturn } from 'helpers/classify'
 
 export default function PageClassifier () {
   const classes = useStyles()
-  const [classification, setClassification] = React.useState<
-    ClassifyReturn | null
-  >(null)
 
   React.useEffect(() => {
     Prism.highlightAll()
   }, [])
 
   const [videoRef, webcamTensor] = useWebcam({ width: 192, height: 192 })
-  const [dataRef, prediction] = usePrediction({
+  const [setDataRef, classification] = useClassifier({
     modelUrl:
-      'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_050_192/classification/3/default/1'
+      'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_050_192/classification/3/default/1',
+    classes: IMAGENET_CLASSES,
+    returns: 1
   })
 
   React.useEffect(() => {
     if (webcamTensor instanceof tf.Tensor) {
-      dataRef.current = webcamTensor.clone()
+      setDataRef(webcamTensor.clone())
     }
   }, [webcamTensor])
-
-  React.useEffect(() => {
-    if (prediction) {
-      const classifiedResult = classify(
-        prediction as tf.Tensor2D,
-        1,
-        IMAGENET_CLASSES
-      )
-      setClassification(classifiedResult)
-    }
-  }, [prediction])
 
   return (
     <main className={classes.root}>
       <article className={classes.regBp}>
         <header>
           <Typography color='textPrimary' component='h2' variant='h5'>
-            usePrediction & useWebcam example
+            useClassifier & useWebcam example
           </Typography>
         </header>
         <section className={classes.section}>
@@ -78,7 +66,7 @@ export default function PageClassifier () {
             {classification ? (
               <>
                 <Typography color='textPrimary' component='p' variant='body1'>
-                  Prediction: {classification[0].className}
+                  Prediction: {classification[0].class}
                 </Typography>
                 <Typography color='textPrimary' component='p' variant='body1'>
                   Probability: {Math.floor(classification[0].probability * 100)}
@@ -106,12 +94,12 @@ export default function PageClassifier () {
             variant='body1'
           >
             Due to memory disposal in <code>@tensorflow/tfjs</code> when setting
-            the <code>dataRef</code> provided by <code>usePrediction</code> you
+            the <code>dataRef</code> provided by <code>useClassifier</code> you
             should use the <code>.clone()</code> method on the tensor
           </Typography>
           <Paper className={classes.codeExample}>
             <pre>
-              <code className='lang-jsx'>{predictionExample}</code>
+              <code className='lang-jsx'>{classificationExample}</code>
             </pre>
           </Paper>
         </section>
