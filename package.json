@@ -32,8 +32,7 @@
   "bugs": "https://github.com/joshuaellis/react-tensorflow/issues",
   "peerDependencies": {
     "@tensorflow/tfjs": ">=2.0.0",
-    "react": ">=16.8",
-    "react-dom": ">=16.8"
+    "react": ">=16.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
@@ -49,7 +48,6 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.56",
-    "@types/react-dom": "^16.9.9",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
     "babel-jest": "^26.6.2",
@@ -65,7 +63,6 @@
     "jest": "^26.6.3",
     "prettier-standard": "^16.4.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.33.1",
