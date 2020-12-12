@@ -6,7 +6,7 @@ import useModel from 'hooks/useModel'
 import usePrediction from 'hooks/usePrediction'
 import useWebcam from 'hooks/useWebcam'
 
-import { ModelInterface } from 'types/index'
+export * from './types/index'
 
 export {
   ModelProvider,
@@ -14,6 +14,5 @@ export {
   useClassifier,
   useModel,
   usePrediction,
-  useWebcam,
-  ModelInterface
+  useWebcam
 }
