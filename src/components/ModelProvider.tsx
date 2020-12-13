@@ -2,7 +2,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react'
 
-import { ModelInterface, ModelProviderProps, ModelProviderState } from 'types/index'
+import {
+  ModelInterface,
+  ModelProviderProps,
+  ModelProviderState
+} from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
@@ -24,11 +28,7 @@ export default class ModelProvider extends React.PureComponent<
 
   componentDidUpdate (prevProps: ModelProviderProps): void {
     const { url: prevUrl, model: prevModel, layers: prevLayers } = prevProps
-    const {
-      url: currUrl,
-      model: currModel,
-      layers: currLayers
-    } = this.props
+    const { url: currUrl, model: currModel, layers: currLayers } = this.props
 
     if (
       (currUrl && currUrl !== prevUrl) ||

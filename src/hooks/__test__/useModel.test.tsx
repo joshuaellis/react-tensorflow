@@ -118,7 +118,9 @@ describe('useModel Hook', () => {
 
   test('should handle an onLoad callback if passed one', async () => {
     const handleLoad = jest.fn()
-    const { result, waitForNextUpdate } = renderHook(() => useModel({ modelUrl: acceptedModelUrls[0], onLoadCallback: handleLoad }))
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModel({ modelUrl: acceptedModelUrls[0], onLoadCallback: handleLoad })
+    )
 
     expect(result.current).toBe(null)
     await waitForNextUpdate()

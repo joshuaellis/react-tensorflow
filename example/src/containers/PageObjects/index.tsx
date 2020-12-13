@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as tf from '@tensorflow/tfjs'
 import Prism from 'prismjs'
 import { Paper, Typography, makeStyles } from '@material-ui/core'
-import {ModelInterface, useObjectDetect} from 'react-tensorflow'
+import { ModelInterface, useObjectDetect } from 'react-tensorflow'
 
 import { objectsExample } from 'references/codeExamples'
 
@@ -21,26 +21,27 @@ export default function PageObjects () {
   }, [])
 
   const onLoadCallback = React.useCallback(async (model: ModelInterface) => {
-    if(model && model instanceof tf.GraphModel){
-      const zeroTensor = tf.zeros([1, 300, 300, 3], 'int32');
-      const result = await model.executeAsync(zeroTensor) as tf.Tensor[];
-      await Promise.all(result.map(t => t.data()));
-      result.map(t => t.dispose());
-      zeroTensor.dispose();
+    if (model && model instanceof tf.GraphModel) {
+      const zeroTensor = tf.zeros([1, 300, 300, 3], 'int32')
+      const result = (await model.executeAsync(zeroTensor)) as tf.Tensor[]
+      await Promise.all(result.map(t => t.data()))
+      result.map(t => t.dispose())
+      zeroTensor.dispose()
     }
   }, [])
 
   const [setData, objects] = useObjectDetect({
-    modelUrl: 'https://tfhub.dev/tensorflow/tfjs-model/ssd_mobilenet_v2/1/default/1', 
+    modelUrl:
+      'https://tfhub.dev/tensorflow/tfjs-model/ssd_mobilenet_v2/1/default/1',
     onLoadCallback,
     useExecute: true
-})
+  })
 
   React.useEffect(() => {
-    if(imgLoaded){
-      const {current: img} = imgRef
-      const tensor = getTensorFromImg(img).cast("int32")
-      if(tensor){
+    if (imgLoaded) {
+      const { current: img } = imgRef
+      const tensor = getTensorFromImg(img).cast('int32')
+      if (tensor) {
         console.log(tensor)
         setData(tensor)
       }

@@ -66,7 +66,7 @@ export default function usePrediction ({
 
 const getPrediction = (
   model: GraphModel | LayersModel | null,
-  { predictConfig, useExecute = false, outputName = '' }: UsePredictionProps
+  { predictConfig, useExecute = false, outputName }: UsePredictionProps
 ) => async (data: tf.Tensor): Promise<Prediction> => {
   if (useExecute && model instanceof tf.GraphModel && model?.executeAsync) {
     return await model.executeAsync(data, outputName)

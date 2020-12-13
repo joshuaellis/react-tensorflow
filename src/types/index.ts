@@ -72,16 +72,24 @@ export let ClassificationReturn: [setDataRef, Classification]
 export interface UseObjectDetectProps extends UsePredictionProps {
   returns?: number
   classes?: { [classId: number]: string }
+  width?: number
+  height?: number
+  minConfidence?: number
 }
 
-export interface BoundingBoxReturn {
-  x: number
-  y: number
+export type BoundingBoxReturn = [number, number, number, number] | []
+
+export type ObjectDetectNonClassified = ResultsBase<number> & {
+  boundingBox: BoundingBoxReturn
 }
 
-export type ObjectDetectNonClassifiedResults = Array<ResultsBase<number> & BoundingBoxReturn>
+export type ObjectDetectNonClassifiedResults = ObjectDetectNonClassified[]
 
-export type ObjectDetectClassifiedResults = Array<ResultsBase<string> & BoundingBoxReturn>
+export type ObjectDetectClassified = ResultsBase<string> & {
+  boundingBox: BoundingBoxReturn
+}
+
+export type ObjectDetectClassifiedResults = ObjectDetectClassified[]
 
 export type ObjectDetection = ObjectDetectNonClassifiedResults | ObjectDetectClassifiedResults | null
 

@@ -48,12 +48,12 @@ describe('usePrediction', () => {
     expect(mockPredict).toHaveBeenCalled()
   })
 
-  it('should use .execute if a execute boolean is passed', async () => {
+  it('should use .executeAsync if a execute boolean is passed', async () => {
     const mockExecute = jest.fn().mockImplementation(v => v)
 
     const promise = new Promise(resolve =>
       resolve({
-        execute: mockExecute,
+        executeAsync: mockExecute,
         dispose: jest.fn()
       })
     )

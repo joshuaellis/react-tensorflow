@@ -6,6 +6,20 @@ import useObjectDetect from '../useObjectDetect'
 describe('useObjectDetect', () => {
   const errorSpy = jest.spyOn(console, 'error')
 
+  const mockData = [
+    0.0032448014244437218,
+    9.299898096060133,
+    0.000020586936443578452,
+    2.728165782173164,
+    7.533527650593896,
+    7.365694898453512,
+    0.0000016460775214000023,
+    8.527451882400783,
+    0.00022167805582284927,
+    7.938750172797882,
+    2.068294335799692
+  ]
+
   const mockClasses: { [classId: number]: string } = {
     0: 'tench, Tinca tinca',
     1: 'goldfish, Carassius auratus',
@@ -22,29 +36,19 @@ describe('useObjectDetect', () => {
   }
   const expectedReturn = [
     {
-      class: 8,
-      probability: 0.2798840403556824,
-      boundingBox: { x: 0, y: 0, width: 10, height: 10 }
+      class: 1,
+      probability: 1,
+      boundingBox: []
     },
     {
-      class: 5,
-      probability: 0.12999391555786133,
-      boundingBox: { x: 1, y: 1, width: 20, height: 20 }
+      class: 1,
+      probability: 1,
+      boundingBox: [300, 300, 0, 0]
     },
     {
-      class: 0,
-      probability: 0.11181672662496567,
-      boundingBox: { x: 2, y: 2, width: 30, height: 30 }
-    },
-    {
-      class: 10,
-      probability: 0.09314952045679092,
-      boundingBox: { x: 3, y: 3, width: 40, height: 40 }
-    },
-    {
-      class: 2,
-      probability: 0.08755432814359665,
-      boundingBox: { x: 4, y: 4, width: 50, height: 50 }
+      class: mockClasses[1],
+      probability: 1,
+      boundingBox: []
     }
   ]
 
@@ -55,38 +59,63 @@ describe('useObjectDetect', () => {
     expect(errorSpy).toHaveBeenCalled()
   })
 
-  it('should return a maximum of 5 raw predictions with no parameters set', async () => {
+  it('should return a prediction with no parameters set, no class name & bounding box should be empty', async () => {
     const { result, waitFor } = renderHook(() =>
       useObjectDetect({
         modelUrl:
-          'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1'
+          'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1',
+        useExecute: true
       })
     )
 
-    console.log([
-      tf.ones([1, 1917, 90]).dataSync(),
-      tf.ones([1, 1917, 1, 4]).dataSync()
-    ])
+    expect(result.current[1]).toBeNull()
 
-    // expect(result.current[1]).toBeNull()
+    void act(() => {
+      result.current[0](tf.tensor(mockData))
+    })
 
-    // void act(() => {
-    //   result.current[0](tf.tensor(mockData))
-    // })
-
-    // await waitFor(() => expect(result.current[1]).not.toBeNull())
-    // expect(result.current[1]).toEqual(expectedReturn)
+    await waitFor(() => expect(result.current[1]).not.toBeNull())
+    expect(result.current[1]).toEqual([expectedReturn[0]])
   })
 
-  it('should return one prediction when a return amount parameter has been set', async () => {
-    expect(false).toBe(true)
+  it('should return a prediction with an array of numbers for bounding box if height & width are passed', async () => {
+    const { result, waitFor } = renderHook(() =>
+      useObjectDetect({
+        modelUrl:
+          'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1',
+        useExecute: true,
+        width: 300,
+        height: 300
+      })
+    )
+
+    expect(result.current[1]).toBeNull()
+
+    void act(() => {
+      result.current[0](tf.tensor(mockData))
+    })
+
+    await waitFor(() => expect(result.current[1]).not.toBeNull())
+    expect(result.current[1]).toEqual([expectedReturn[1]])
   })
 
   it('should return a prediction in the format of class:confidence%:boundingBox when classes are passed', async () => {
-    expect(false).toBe(true)
-  })
+    const { result, waitFor } = renderHook(() =>
+      useObjectDetect({
+        modelUrl:
+          'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1',
+        useExecute: true,
+        classes: mockClasses
+      })
+    )
 
-  it('should return a different result if new data is passed', async () => {
-    expect(false).toBe(true)
+    expect(result.current[1]).toBeNull()
+
+    void act(() => {
+      result.current[0](tf.tensor(mockData))
+    })
+
+    await waitFor(() => expect(result.current[1]).not.toBeNull())
+    expect(result.current[1]).toEqual([expectedReturn[2]])
   })
 })

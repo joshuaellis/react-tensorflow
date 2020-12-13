@@ -71,7 +71,7 @@ describe('withModel', () => {
     // changes to use a Graph Model, without changing url
     rerender(
       <ModelProvider
-      layers={false}
+        layers={false}
         url='https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1'
       >
         <ExampleComponent />
