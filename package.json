@@ -19,6 +19,7 @@
     "react-hooks"
   ],
   "scripts": {
+    "dev": "rollup -c --watch",
     "build": "rollup -c && tsc-alias",
     "format": "prettier-standard --format",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && yarn format",
