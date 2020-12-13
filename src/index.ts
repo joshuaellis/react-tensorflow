@@ -3,6 +3,7 @@ import withModel from 'components/withModel'
 
 import useClassifier from 'hooks/useClassifier'
 import useModel from 'hooks/useModel'
+import useObjectDetect from 'hooks/useObjectDetect'
 import usePrediction from 'hooks/usePrediction'
 import useWebcam from 'hooks/useWebcam'
 
@@ -13,6 +14,7 @@ export {
   withModel,
   useClassifier,
   useModel,
+  useObjectDetect,
   usePrediction,
   useWebcam
 }
