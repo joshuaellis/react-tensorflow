@@ -14,6 +14,7 @@ export interface UseModelProps extends LoadOptionsType {
 
 export interface LoadOptionsType {
   layers?: boolean
+  onLoadCallback?: (model: ModelInterface) => void
 }
 
 export type ModelContext = {
@@ -22,12 +23,11 @@ export type ModelContext = {
 
 export type ModelInterface = GraphModel | LayersModel | null
 
-export interface ModelProviderProps {
+export interface ModelProviderProps extends LoadOptionsType{
   url?: string
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   model?: any
   children?: React.ReactNode
-  layerModel?: boolean
 }
 
 export interface ModelProviderState {
