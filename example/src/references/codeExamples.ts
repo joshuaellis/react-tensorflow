@@ -112,3 +112,5 @@ export default Predictor () {
     </div>
   )
 }`
+
+export const objectsExample = ``
