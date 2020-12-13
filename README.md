@@ -123,13 +123,13 @@ in the form of a tensor. It then returns a new tensor as the prediction using ei
 set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses 
 `useModel` under the hood. You can then perform different actions such as normalizing the data 
 for to classify the original input. By default `usePrediction` uses `.predict`, if you want to 
-force the use of `.execute` set `useExecute: true` and if you want to use a custom predict 
+force the use of `.executeAsync` set `useExecute: true` and if you want to use a custom predict 
 function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you 
 must set `outputName`.
 
 :no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript 
 errors if the model predicition method is called or will simply return null because the model 
-either does not have an execute or predict function or it does, and it has not returned a 
+either does not have an executeAsync or predict function or it does, and it has not returned a 
 Tensor. :no_entry_sign:
 
 ### useClassifier
