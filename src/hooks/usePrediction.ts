@@ -44,15 +44,16 @@ export default function usePrediction ({
   React.useEffect(() => {
     if (model && data && !predictionFault) {
       try {
-        const prediction = predictFunc(data)
-        requestFramRef.current = requestAnimationFrame(() =>
-          setPrediction(oldPrediction => {
-            if (oldPrediction) {
-              tf.dispose(oldPrediction)
-            }
-            return prediction
-          })
-        )
+        void Promise.resolve(predictFunc(data)).then(prediction => {
+          requestFramRef.current = requestAnimationFrame(() =>
+            setPrediction(oldPrediction => {
+              if (oldPrediction) {
+                tf.dispose(oldPrediction)
+              }
+              return prediction
+            })
+          )
+        })
       } catch (err) {
         console.error(err.message)
         setPredictionFault(true)
@@ -66,10 +67,10 @@ export default function usePrediction ({
 const getPrediction = (
   model: GraphModel | LayersModel | null,
   { predictConfig, useExecute = false, outputName = '' }: UsePredictionProps
-) => (data: tf.Tensor): Prediction => {
-  if (useExecute && model?.execute) {
-    return model.execute(data, outputName)
-  } else if (model?.predict) {
+) => async (data: tf.Tensor): Promise<Prediction> => {
+  if (useExecute && model instanceof tf.GraphModel && model?.executeAsync) {
+    return await model.executeAsync(data, outputName)
+  } else if (model?.predict ?? model instanceof tf.LayersModel) {
     return model.predict(data, predictConfig)
   } else {
     throw new Error('model does not have prediction function')
