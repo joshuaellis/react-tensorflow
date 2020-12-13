@@ -28,7 +28,7 @@ npm i react-tensorflow -S
 
 ## Basic usage
 
-```js
+```tsx
 import { useModel } from 'react-tensorflow'
 
 const MyModelComponent = () => {
@@ -44,25 +44,47 @@ const MyModelComponent = () => {
 
 ### useModel
 
-```js
-useModel({model?: any, modelUrl?: string, layers?: boolean}): GraphModel | LayersModel | null
+```tsx
+useModel({ 
+  model?: any, 
+  modelUrl?: string, 
+  layers?: boolean, 
+  onLoadCallback?: (model: GraphModel | LayersModel | null) => void
+}): GraphModel | LayersModel | null
 ```
 
-If `model` or `modelUrl` is omitted useModel will look to find the ModelProvider as it's context for returning the model. When loading a model with this hook, the `layers` boolean is passed if your TF model should be loaded with the function `tf.loadLayersModel` otherwise it is assumed the model should be loaded with `tf.loadGraphModel`.
+If `model` or `modelUrl` is omitted useModel will look to find the ModelProvider as it's context 
+for returning the model. When loading a model with this hook, the `layers` boolean is passed if 
+your TF model should be loaded with the function `tf.loadLayersModel` otherwise it is assumed the 
+model should be loaded with `tf.loadGraphModel`. If a model is loaded with `modelUrl` and an 
+`onLoadCallback` function is provided, it will be called with the loaded model. This function is 
+intended to be used as a warm up function that could look like this –
+
+```js
+(model) => {
+  const zeroTensor = tf.zeros([1, 300, 300, 3], 'int32');
+  const result = await this.model.executeAsync(zeroTensor) as tf.Tensor[];
+  await Promise.all(result.map(t => t.data()));
+  result.map(t => t.dispose());
+  zeroTensor.dispose();
+}
+```
 
 ### ModelProvider
 
-```js
-<ModelProvider url={string} layers={boolean}>
+```tsx
+<ModelProvider url={string} layers={boolean} onLoadCallback={(model) => void}>
   <App />
 </ModelProvider>
 ```
 
-Wraps the children in a React Provider to be consumed by Context's in either the `useModel` hook or `withModel` HOC. The props passed to this provider are the same as the documented props for `useModel`.
+Wraps the children in a React Provider to be consumed by Context's in either the `useModel` hook 
+or `withModel` HOC. The props passed to this provider are the same as the documented props for 
+`useModel`.
 
 ### withModel
 
-```js
+```tsx
 withModel(Component: React.ComponentType): JSX.Element
 ```
 
@@ -70,7 +92,7 @@ Wraps the provided component in a React Context, passing the model give to the p
 
 ### useWebcam
 
-```js
+```tsx
 useWebcam (options?: {
     width?: number
     height?: number
@@ -78,11 +100,14 @@ useWebcam (options?: {
   }): [React.MutableRefObject<HTMLVideoElement>, tf.Tensor | null]
 ```
 
-Provides a ref to be used on a video element, the hook then returns a tensor with shape `[1, width, height, 3]` where the width and height are either dictated by the element's width & height or the provided argument documented above. The options argument while documented above can infact take all the properties of the [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints).
+Provides a ref to be used on a video element, the hook then returns a tensor with shape 
+`[1, width, height, 3]` where the width and height are either dictated by the element's width 
+& height or the provided argument documented above. The options argument while documented 
+above can infact take all the properties of the [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints).
 
 ### usePrediction
 
-```js
+```tsx
 usePrediction (options?: {
   predictConfig?: {},
   useExecute?: boolean = false,
@@ -93,13 +118,23 @@ usePrediction (options?: {
 }): [(data: tf.Tensor) => void, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
 ```
 
-Provides a function to set the data you want to use to create a prediction. The data must be in the form of a tensor. It then returns a new tensor as the prediction using either the model set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses `useModel` under the hood. You can then perform different actions such as normalizing the data for to classify the original input. By default `usePrediction` uses `.predict`, if you want to force the use of `.execute` set `useExecute: true` and if you want to use a custom predict function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you must set `outputName`.
+Provides a function to set the data you want to use to create a prediction. The data must be 
+in the form of a tensor. It then returns a new tensor as the prediction using either the model 
+set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses 
+`useModel` under the hood. You can then perform different actions such as normalizing the data 
+for to classify the original input. By default `usePrediction` uses `.predict`, if you want to 
+force the use of `.execute` set `useExecute: true` and if you want to use a custom predict 
+function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you 
+must set `outputName`.
 
-:no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript errors if the model predicition method is called or will simply return null because the model either does not have an execute or predict function or it does, and it has not returned a Tensor. :no_entry_sign:
+:no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript 
+errors if the model predicition method is called or will simply return null because the model 
+either does not have an execute or predict function or it does, and it has not returned a 
+Tensor. :no_entry_sign:
 
 ### useClassifier
 
-```js
+```tsx
 useClassifer(options?: {
   classes?: {},
   returns?: number,
@@ -108,7 +143,10 @@ useClassifer(options?: {
 }): [(data: tf.Tensor) => void, Array<{class: number, probability: number}>, Array<{class: string, probability: number}>, null]
 ```
 
-uses `usePrediction` under the hood so it provides a function to set the data, it must be in the form of a tensor. It then returns an array of classifications (be default, the array will have length 5). If the classes argument is provided, the class key in the returned array will be the class at the index of the prediction.
+uses `usePrediction` under the hood so it provides a function to set the data, it must be in the 
+form of a tensor. It then returns an array of classifications (be default, the array will have 
+length 5). If the classes argument is provided, the class key in the returned array will be the 
+class at the index of the prediction.
 
 ## Contributing
 

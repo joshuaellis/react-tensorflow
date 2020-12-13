@@ -60,6 +60,8 @@ const getModel = async (
 
     if (!loadedModel) {
       throw new Error(modelFailedLoad('useModel'))
+    } else if (loadedModel && opts.onLoadCallback) {
+      opts.onLoadCallback(loadedModel)
     }
 
     return loadedModel
