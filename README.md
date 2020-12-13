@@ -63,7 +63,7 @@ intended to be used as a warm up function that could look like this –
 ```js
 (model) => {
   const zeroTensor = tf.zeros([1, 300, 300, 3], 'int32');
-  const result = await this.model.executeAsync(zeroTensor) as tf.Tensor[];
+  const result = await model.executeAsync(zeroTensor) as tf.Tensor[];
   await Promise.all(result.map(t => t.data()));
   result.map(t => t.dispose());
   zeroTensor.dispose();
