@@ -25,26 +25,26 @@ export default function usePrediction ({
   const model = useModel({ ...props })
   const [data, setDataRef] = useDataRef()
 
-  const predictFunc = React.useCallback(
-    getPrediction(model, {
-      useExecute,
-      outputName,
-      predictConfig
-    }),
-    [model, useExecute, outputName, predictConfig]
-  )
-
   React.useEffect(() => {
     return () => {
       cancelAnimationFrame(requestFramRef.current)
-      void (prediction as tf.Tensor)?.dispose()
+
+      if (prediction) {
+        void (prediction as tf.Tensor)?.dispose()
+      }
     }
   }, [prediction])
 
   React.useEffect(() => {
     if (model && data && !predictionFault) {
-      try {
-        void Promise.resolve(predictFunc(data)).then(prediction => {
+      const predictFunc = getPrediction(model, {
+        useExecute,
+        outputName,
+        predictConfig
+      })(data)
+
+      void Promise.resolve(predictFunc)
+        .then(prediction => {
           requestFramRef.current = requestAnimationFrame(() =>
             setPrediction(oldPrediction => {
               if (oldPrediction) {
@@ -54,10 +54,10 @@ export default function usePrediction ({
             })
           )
         })
-      } catch (err) {
-        console.error(err.message)
-        setPredictionFault(true)
-      }
+        .catch(e => {
+          console.error(e.message)
+          setPredictionFault(true)
+        })
     }
   }, [model, data])
 

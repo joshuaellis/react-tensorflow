@@ -1,4 +1,5 @@
 import * as tf from '@tensorflow/tfjs'
+import { GraphModel } from '@tensorflow/tfjs'
 import { renderHook, act } from '@testing-library/react-hooks'
 
 import usePrediction from '../usePrediction'
@@ -51,12 +52,13 @@ describe('usePrediction', () => {
   it('should use .executeAsync if a execute boolean is passed', async () => {
     const mockExecute = jest.fn().mockImplementation(v => v)
 
-    const promise = new Promise(resolve =>
-      resolve({
-        executeAsync: mockExecute,
-        dispose: jest.fn()
-      })
-    )
+    const promise = new Promise(resolve => {
+      const mod = new GraphModel(
+        'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1'
+      )
+      mod.executeAsync = mockExecute
+      resolve(mod)
+    })
 
     const { waitForNextUpdate, result } = renderHook(() =>
       usePrediction({
@@ -81,7 +83,7 @@ describe('usePrediction', () => {
     const expected = tf.tensor([1, 2, 3, 4])
     const promise = new Promise(resolve => resolve({ dispose: jest.fn() }))
 
-    const { waitForNextUpdate, result } = renderHook(() =>
+    const { waitFor, result } = renderHook(() =>
       usePrediction({
         model: {
           load: async () => await promise
@@ -93,7 +95,8 @@ describe('usePrediction', () => {
       result.current[0](expected)
     })
 
-    await waitForNextUpdate()
+    await waitFor(() => expect(errorSpy).toBeCalled())
+
     expect(errorSpy).toBeCalledWith('model does not have prediction function')
     expect(requestAnimSpy).not.toHaveBeenCalled()
   })
