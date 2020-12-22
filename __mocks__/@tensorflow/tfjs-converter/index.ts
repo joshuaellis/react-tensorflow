@@ -8,6 +8,7 @@ export class GraphModel {
     this.executeReturn = executeReturn
   }
 
+  name = 'TF Graph Model'
   predict = (v: any) => v
   executeAsync = (v: any) => this.executeReturn
   outputs = [{ name: 'output_layer' }]
