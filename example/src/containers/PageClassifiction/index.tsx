@@ -1,5 +1,4 @@
 import * as React from 'react'
-import clsx from 'clsx'
 import Prism from 'prismjs'
 import * as tf from '@tensorflow/tfjs'
 import { Paper, Typography, makeStyles } from '@material-ui/core'
@@ -7,8 +6,6 @@ import { useWebcam, useClassifier } from 'react-tensorflow'
 
 import { classificationExample } from 'references/codeExamples'
 import { IMAGENET_CLASSES } from 'references/mobilenetHocClasses'
-
-import classify, { ClassifyReturn } from 'helpers/classify'
 
 export default function PageClassifier () {
   const classes = useStyles()
@@ -42,7 +39,7 @@ export default function PageClassifier () {
         <section className={classes.section}>
           <Typography color='textPrimary' component='p' variant='body1'>
             This example uses the useWebcam hook to create tensors from the
-            user's camera, when this is returned we can pass it to usePrediction
+            user's camera, when this is returned we can pass it to useClassifer
             hook that is currently running the mobilenet{' '}
             <code>mobilenet_v2_050_192</code> model from <code>tfhub</code>.
           </Typography>

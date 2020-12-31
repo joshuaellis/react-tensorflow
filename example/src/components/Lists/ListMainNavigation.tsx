@@ -12,7 +12,8 @@ import { RootState } from 'src/reducers'
 import {
   Home as HomeIcon,
   Build as BuildIcon,
-  Class as ClassIcon
+  Class as ClassIcon,
+  PictureInPicture as ObjectIcon
 } from '@material-ui/icons'
 
 interface OwnProps {}
@@ -71,5 +72,10 @@ const items = [
     title: 'Classifier',
     icon: <ClassIcon />,
     href: '/classifier'
+  },
+  {
+    title: 'Objects',
+    icon: <ObjectIcon />,
+    href: '/objects'
   }
 ]

@@ -2,16 +2,19 @@ import * as React from 'react'
 import * as tf from '@tensorflow/tfjs'
 import Prism from 'prismjs'
 import { Paper, Typography, makeStyles } from '@material-ui/core'
-import { ModelInterface, useObjectDetect } from 'react-tensorflow'
+import { ModelInterface, useObjectDetect, ObjectDetectClassified } from 'react-tensorflow'
 
 import { objectsExample } from 'references/codeExamples'
+import { COCO_SSD_CLASSES } from 'references/cocossdClasses'
 
 import getTensorFromImg from 'helpers/getTensorFromImg'
+
+import BoundingBox from 'components/BoundingBox'
 
 export default function PageObjects () {
   const classes = useStyles()
 
-  const imgRef = React.useRef<HTMLImageElement>(null!)
+  const imgRef = React.useRef<HTMLImageElement>(null)
   const [imgLoaded, setImgLoad] = React.useState<boolean>(false)
 
   const handleImgLoad = () => setImgLoad(true)
@@ -34,34 +37,42 @@ export default function PageObjects () {
     modelUrl:
       'https://tfhub.dev/tensorflow/tfjs-model/ssd_mobilenet_v2/1/default/1',
     onLoadCallback,
-    useExecute: true
+    useExecute: true,
+    width: imgRef.current?.width ?? 0,
+    height: imgRef.current?.height ?? 0,
+    classes: COCO_SSD_CLASSES
   })
 
   React.useEffect(() => {
     if (imgLoaded) {
       const { current: img } = imgRef
-      const tensor = getTensorFromImg(img).cast('int32')
-      if (tensor) {
-        console.log(tensor)
-        setData(tensor)
+      if(img){
+        const tensor = getTensorFromImg(img).cast('int32')
+        if (tensor) {
+          setData(tensor)
+        }
       }
     }
   }, [imgLoaded])
+
+  console.log(objects)
 
   return (
     <main className={classes.root}>
       <article className={classes.regBp}>
         <header>
           <Typography color='textPrimary' component='h2' variant='h5'>
-            useClassifier & useWebcam example
+            useObjectDetect example
           </Typography>
         </header>
         <section className={classes.section}>
           <Typography color='textPrimary' component='p' variant='body1'>
-            {/* This example uses the useWebcam hook to create tensors from the
-            user's camera, when this is returned we can pass it to usePrediction
-            hook that is currently running the mobilenet{' '}
-            <code>mobilenet_v2_050_192</code> model from <code>tfhub</code>. */}
+            This example uses useObjectDetect hook to analyze an image 
+            and return the class, probability and bounding box of the 
+            objects. The useObjectDetect hook is currently running the 
+            cocossd{' '}<code>mobilenet_v2</code> model from <code>tfhub</code>.
+            For this model, we provide a warmup function by using the{' '} 
+            <code>onLoadCallback</code> argument.
           </Typography>
         </section>
         <section className={classes.section}>
@@ -73,26 +84,29 @@ export default function PageObjects () {
           >
             Actual example
           </Typography>
-          <img
-            onLoad={handleImgLoad}
-            className={classes.exampleImage}
-            ref={imgRef}
-            src={'/public/images/hoc-honeybee.jpg'}
-          />
+          <div style={{position:'relative'}}>
+            <img
+              onLoad={handleImgLoad}
+              className={classes.exampleImage}
+              ref={imgRef}
+              src={'/public/images/object-room.webp'}
+              />
+              {objects ? objects.map((object: ObjectDetectClassified) => <BoundingBox box={object.boundingBox} label={object.class} probability={object.probability} />) : null}
+          </div>
           <Paper className={classes.prediction} elevation={0}>
-            {/* {classification ? (
-              <>
+            {objects ? objects.map((object: ObjectDetectClassified) => (
+              <React.Fragment key={object.class}>
                 <Typography color='textPrimary' component='p' variant='body1'>
-                  Prediction: {classification[0].class}
+                  Prediction: {object.class}
                 </Typography>
                 <Typography color='textPrimary' component='p' variant='body1'>
-                  Probability: {Math.floor(classification[0].probability * 100)}
+                  Probability: {Math.floor(object.probability * 100)}
                   %
                 </Typography>
-              </>
-            ) : (
+              </React.Fragment>
+            )) : (
               'no prediction'
-            )} */}
+            )}
           </Paper>
         </section>
         <section className={classes.section}>
@@ -110,13 +124,10 @@ export default function PageObjects () {
             component='p'
             variant='body1'
           >
-            {/* Due to memory disposal in <code>@tensorflow/tfjs</code> when setting
-            the <code>dataRef</code> provided by <code>useClassifier</code> you
-            should use the <code>.clone()</code> method on the tensor */}
           </Typography>
           <Paper className={classes.codeExample}>
             <pre>
-              {/* <code className='lang-jsx'>{objectsExample}</code> */}
+              <code className='lang-jsx'>{objectsExample}</code>
             </pre>
           </Paper>
         </section>
