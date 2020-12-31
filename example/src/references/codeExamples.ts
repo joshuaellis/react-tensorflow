@@ -124,10 +124,10 @@ export default ObjectDetector () {
 
   const handleImgLoad = () => setImgLoad(true)
 
-  const onLoadCallback = React.useCallback(async (model: ModelInterface) => {
-    if (model && model instanceof tf.GraphModel) {
+  const onLoadCallback = React.useCallback(async model => {
+    if (model) {
       const zeroTensor = tf.zeros([1, 300, 300, 3], 'int32')
-      const result = (await model.executeAsync(zeroTensor)) as tf.Tensor[]
+      const result = await model.executeAsync(zeroTensor)
       await Promise.all(result.map(t => t.data()))
       result.map(t => t.dispose())
       zeroTensor.dispose()
