@@ -29,15 +29,16 @@ export default function useObjectDetect ({
 }: UseObjectDetectProps = {}): typeof ObjectDetectReturn {
   const [detection, setObjectDetection] = React.useState<ObjectDetection>(null)
   const requestFramRef = React.useRef(0)
+  const noBoxesReturningRef = React.useRef(logOnce(() =>
+  console.warn(
+    'You have not supplied a width and/or height to useObjectDetect, no boxes will be provided.'
+  )
+))
 
   const [setDataRef, prediction] = usePrediction({ modelUrl, layers, ...props })
 
   if (!width || !height) {
-    logOnce(() =>
-      console.warn(
-        'You have not supplied a width and/or height to useObjectDetect, no boxes will be provided.'
-      )
-    )
+    noBoxesReturningRef.current()
   }
 
   const createObjectPredictions = React.useCallback(

@@ -5,6 +5,7 @@ import useObjectDetect from '../useObjectDetect'
 
 describe('useObjectDetect', () => {
   const errorSpy = jest.spyOn(console, 'error')
+  const warnSpy = jest.spyOn(console, 'warn')
 
   const mockData = [
     0.0032448014244437218,
@@ -69,6 +70,7 @@ describe('useObjectDetect', () => {
     )
 
     expect(result.current[1]).toBeNull()
+    expect(warnSpy).toBeCalled()
 
     void act(() => {
       result.current[0](tf.tensor(mockData))
@@ -110,6 +112,7 @@ describe('useObjectDetect', () => {
     )
 
     expect(result.current[1]).toBeNull()
+    expect(warnSpy).toBeCalled()
 
     void act(() => {
       result.current[0](tf.tensor(mockData))
