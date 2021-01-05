@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import PageHome from 'containers/PageHome'
 import PageHOC from 'containers/PageHOC'
 import PageClassifiction from 'containers/PageClassifiction'
+import PageObjects from 'containers/PageObjects'
 
 import { SiteDrawer, SiteHeader } from 'components/Site'
 import { ListMainNavigation } from 'components/Lists'
@@ -35,6 +36,7 @@ export default function App () {
           <Route exact path='/' component={PageHome} />
           <Route exact path='/hoc' component={PageHOC} />
           <Route exact path='/classifier' component={PageClassifiction} />
+          <Route exact path='/objects' component={PageObjects} />
           <Route component={() => <Redirect to='/' />} />
         </Switch>
       </main>

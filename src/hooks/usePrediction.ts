@@ -25,38 +25,39 @@ export default function usePrediction ({
   const model = useModel({ ...props })
   const [data, setDataRef] = useDataRef()
 
-  const predictFunc = React.useCallback(
-    getPrediction(model, {
-      useExecute,
-      outputName,
-      predictConfig
-    }),
-    [model, useExecute, outputName, predictConfig]
-  )
-
   React.useEffect(() => {
     return () => {
       cancelAnimationFrame(requestFramRef.current)
-      void (prediction as tf.Tensor)?.dispose()
+
+      if (prediction) {
+        void (prediction as tf.Tensor)?.dispose()
+      }
     }
   }, [prediction])
 
   React.useEffect(() => {
     if (model && data && !predictionFault) {
-      try {
-        const prediction = predictFunc(data)
-        requestFramRef.current = requestAnimationFrame(() =>
-          setPrediction(oldPrediction => {
-            if (oldPrediction) {
-              tf.dispose(oldPrediction)
-            }
-            return prediction
-          })
-        )
-      } catch (err) {
-        console.error(err.message)
-        setPredictionFault(true)
-      }
+      const predictFunc = getPrediction(model, {
+        useExecute,
+        outputName,
+        predictConfig
+      })(data)
+
+      void Promise.resolve(predictFunc)
+        .then(prediction => {
+          requestFramRef.current = requestAnimationFrame(() =>
+            setPrediction(oldPrediction => {
+              if (oldPrediction) {
+                tf.dispose(oldPrediction)
+              }
+              return prediction
+            })
+          )
+        })
+        .catch(e => {
+          console.error(e.message)
+          setPredictionFault(true)
+        })
     }
   }, [model, data])
 
@@ -65,11 +66,11 @@ export default function usePrediction ({
 
 const getPrediction = (
   model: GraphModel | LayersModel | null,
-  { predictConfig, useExecute = false, outputName = '' }: UsePredictionProps
-) => (data: tf.Tensor): Prediction => {
-  if (useExecute && model?.execute) {
-    return model.execute(data, outputName)
-  } else if (model?.predict) {
+  { predictConfig, useExecute = false, outputName }: UsePredictionProps
+) => async (data: tf.Tensor): Promise<Prediction> => {
+  if (useExecute && model instanceof tf.GraphModel && model?.executeAsync) {
+    return await model.executeAsync(data, outputName)
+  } else if (model?.predict ?? model instanceof tf.LayersModel) {
     return model.predict(data, predictConfig)
   } else {
     throw new Error('model does not have prediction function')

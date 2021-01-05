@@ -19,6 +19,7 @@
     "react-hooks"
   ],
   "scripts": {
+    "dev": "rollup -c --watch",
     "build": "rollup -c && tsc-alias",
     "format": "prettier-standard --format",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && yarn format",
@@ -32,8 +33,7 @@
   "bugs": "https://github.com/joshuaellis/react-tensorflow/issues",
   "peerDependencies": {
     "@tensorflow/tfjs": ">=2.0.0",
-    "react": ">=16.8",
-    "react-dom": ">=16.8"
+    "react": ">=16.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
@@ -49,7 +49,6 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.56",
-    "@types/react-dom": "^16.9.9",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
     "babel-jest": "^26.6.2",

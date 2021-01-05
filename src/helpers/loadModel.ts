@@ -5,11 +5,11 @@ import { LoadOptionsType, ModelInterface } from 'types/index'
 import { modelUrlError } from 'references/errors'
 
 const loadModel = async (
-  url: string | undefined,
+  url: string,
   { layers = false }: LoadOptionsType | undefined = {}
 ): Promise<ModelInterface> => {
   try {
-    if (url === undefined) {
+    if (!url) {
       throw new Error(modelUrlError())
     }
 

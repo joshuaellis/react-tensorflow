@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs'
 
-const getTensorFromImg = (elem: HTMLImageElement) =>
+const getTensorFromImg = (elem: HTMLImageElement): tf.Tensor3D =>
   tf.tidy(() => {
     const image = tf.browser.fromPixels(elem)
 

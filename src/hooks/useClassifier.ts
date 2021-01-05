@@ -14,14 +14,15 @@ export default function useClassifier ({
   returns = 5,
   classes,
   modelUrl,
-  layers
+  layers,
+  ...props
 }: UseClassifierProps = {}): typeof ClassificationReturn {
   const [classifications, setClassifications] = React.useState<Classification>(
     null
   )
   const requestFramRef = React.useRef(0)
 
-  const [setDataRef, prediction] = usePrediction({ modelUrl, layers })
+  const [setDataRef, prediction] = usePrediction({ modelUrl, layers, ...props })
 
   const classify = React.useCallback(
     (tensor: Prediction): Classification => {

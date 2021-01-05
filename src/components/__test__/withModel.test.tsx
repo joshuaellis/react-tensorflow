@@ -59,7 +59,7 @@ describe('withModel', () => {
     rerender(
       <ModelProvider
         url='https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1'
-        layerModel
+        layers
       >
         <ExampleComponent />
       </ModelProvider>
@@ -71,7 +71,7 @@ describe('withModel', () => {
     // changes to use a Graph Model, without changing url
     rerender(
       <ModelProvider
-        layerModel={false}
+        layers={false}
         url='https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1'
       >
         <ExampleComponent />
@@ -103,5 +103,18 @@ describe('withModel', () => {
   it("it should throw an error if there's no model provider accessible", () => {
     expect(() => render(<ExampleComponent />)).toThrowError()
     expect(console.error).toHaveBeenCalled()
+  })
+
+  it('should call onLoadCallback on a url model if passed one', async () => {
+    const onLoadCallback = jest.fn()
+    const { getByTestId, getByRole } = customRender({
+      onLoadCallback,
+      url:
+        'https://tfhub.dev/google/tfjs-model/imagenet/inception_v3/classification/3/default/1'
+    })
+
+    expect(getByTestId('model-name')).toBeTruthy()
+    await waitFor(() => getByRole('title'))
+    expect(onLoadCallback).toHaveBeenCalled()
   })
 })

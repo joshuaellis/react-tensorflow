@@ -2,7 +2,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from 'react'
 
-import { ModelProviderProps, ModelProviderState } from 'types/index'
+import {
+  ModelInterface,
+  ModelProviderProps,
+  ModelProviderState
+} from 'types/index'
 
 import loadModel from 'helpers/loadModel'
 
@@ -23,12 +27,8 @@ export default class ModelProvider extends React.PureComponent<
   }
 
   componentDidUpdate (prevProps: ModelProviderProps): void {
-    const { url: prevUrl, model: prevModel, layerModel: prevLayers } = prevProps
-    const {
-      url: currUrl,
-      model: currModel,
-      layerModel: currLayers
-    } = this.props
+    const { url: prevUrl, model: prevModel, layers: prevLayers } = prevProps
+    const { url: currUrl, model: currModel, layers: currLayers } = this.props
 
     if (
       (currUrl && currUrl !== prevUrl) ||
@@ -40,11 +40,11 @@ export default class ModelProvider extends React.PureComponent<
   }
 
   loadContextModel = async (): Promise<void> => {
-    const { url, model, layerModel } = this.props
+    const { url, model, layers, onLoadCallback } = this.props
 
     try {
       if (url) {
-        void this.loadUrlModel(url, layerModel)
+        void this.loadUrlModel(url, layers, onLoadCallback)
       } else if (model) {
         void this.loadNpmModel(model)
       } else {
@@ -57,11 +57,15 @@ export default class ModelProvider extends React.PureComponent<
 
   loadUrlModel = async (
     url: string,
-    layers: boolean | undefined
+    layers: boolean | undefined,
+    onLoadCallback?: (model: ModelInterface) => void
   ): Promise<void> => {
     try {
       const loadedModel = await loadModel(url, { layers })
       if (loadedModel) {
+        if (onLoadCallback) {
+          onLoadCallback(loadedModel)
+        }
         this.setState({ model: loadedModel })
       } else {
         throw new Error(modelFailedLoad('ModelProvider'))

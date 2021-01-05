@@ -14,6 +14,7 @@ export interface UseModelProps extends LoadOptionsType {
 
 export interface LoadOptionsType {
   layers?: boolean
+  onLoadCallback?: (model: ModelInterface) => void
 }
 
 export type ModelContext = {
@@ -22,12 +23,11 @@ export type ModelContext = {
 
 export type ModelInterface = GraphModel | LayersModel | null
 
-export interface ModelProviderProps {
+export interface ModelProviderProps extends LoadOptionsType{
   url?: string
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   model?: any
   children?: React.ReactNode
-  layerModel?: boolean
 }
 
 export interface ModelProviderState {
@@ -50,6 +50,8 @@ export type Prediction = tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null
 
 export type setDataRef = (data: tf.Tensor) => void
 
+export let UseDataRefReturn: [tf.Tensor | null, setDataRef]
+
 export let PredictionReturn: [setDataRef, Prediction]
 
 export interface UseClassifierProps extends UsePredictionProps {
@@ -57,12 +59,38 @@ export interface UseClassifierProps extends UsePredictionProps {
   classes?: { [classId: number]: string }
 }
 
-export type ClassifiedResults = Array<{class: string, probability: number}>
+interface ResultsBase<T> {class: T, probability: number}
 
-export type NonClassifiedResults = Array<{class: number, probability: number}>
+export type ClassifiedResults = Array<ResultsBase<string>>
+
+export type NonClassifiedResults = Array<ResultsBase<number>>
 
 export type Classification = ClassifiedResults | NonClassifiedResults | null
 
 export let ClassificationReturn: [setDataRef, Classification]
 
-export let UseDataRefReturn: [tf.Tensor | null, setDataRef]
+export interface UseObjectDetectProps extends UsePredictionProps {
+  returns?: number
+  classes?: { [classId: number]: string }
+  width?: number
+  height?: number
+  minConfidence?: number
+}
+
+export type BoundingBoxReturn = [number, number, number, number] | []
+
+export type ObjectDetectNonClassified = ResultsBase<number> & {
+  boundingBox: BoundingBoxReturn
+}
+
+export type ObjectDetectNonClassifiedResults = ObjectDetectNonClassified[]
+
+export type ObjectDetectClassified = ResultsBase<string> & {
+  boundingBox: BoundingBoxReturn
+}
+
+export type ObjectDetectClassifiedResults = ObjectDetectClassified[]
+
+export type ObjectDetection = ObjectDetectNonClassifiedResults | ObjectDetectClassifiedResults | null
+
+export let ObjectDetectReturn: [setDataRef, ObjectDetection]
