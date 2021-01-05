@@ -29,22 +29,28 @@ export default function useObjectDetect ({
 }: UseObjectDetectProps = {}): typeof ObjectDetectReturn {
   const [detection, setObjectDetection] = React.useState<ObjectDetection>(null)
   const requestFramRef = React.useRef(0)
-  const noBoxesReturningRef = React.useRef(logOnce(() =>
-  console.warn(
-    'You have not supplied a width and/or height to useObjectDetect, no boxes will be provided.'
+  const noBoxesReturningRef = React.useRef(
+    logOnce(() =>
+      console.warn(
+        'You have not supplied a width and/or height to useObjectDetect, no boxes will be provided.'
+      )
+    )
   )
-))
 
-  const [setDataRef, prediction] = usePrediction({ modelUrl, layers, ...props })
+  const [setDataRef, prediction] = usePrediction({
+    modelUrl,
+    layers,
+    ...props
+  })
 
-  if (!width || !height) {
+  if (typeof width !== 'number' || typeof height !== 'number') {
     noBoxesReturningRef.current()
   }
 
   const createObjectPredictions = React.useCallback(
-    (res: tf.Tensor[]): ObjectDetection => {
+    (res: tf.Tensor4D[]): ObjectDetection => {
       let resetBackend = null
-      const [scores, boxes] = res.map(data => {
+      const [scores, boxes] = res.map((data) => {
         const datum = data.dataSync()
         data.dispose()
         return datum as Float32Array
@@ -52,7 +58,6 @@ export default function useObjectDetect ({
 
       const [maxScores, classIndexes] = calcMaxScores(
         scores,
-        // @ts-expect-error why you break piece of shit
         res[0].shape[1],
         res[0].shape[2]
       )
@@ -62,7 +67,7 @@ export default function useObjectDetect ({
       }
 
       const indexTensor = tf.tidy(() => {
-        const boxes2 = tf.tensor2d(boxes, [res[1].shape[1] ?? 0, res[1].shape[3] ?? 0])
+        const boxes2 = tf.tensor2d(boxes, [res[1].shape[1], res[1].shape[3]])
         return tf.image.nonMaxSuppression(
           boxes2,
           maxScores,
@@ -79,22 +84,19 @@ export default function useObjectDetect ({
         resetBackend()
       }
 
-return buildObjects(
+      return buildObjects(
         indexes,
         maxScores,
         { width, height, boxes },
-        {
-classIndexes,
-          classes
-}
+        { classIndexes, classes }
       )
     },
-    []
+    [width, height, classes, returns, minConfidence]
   )
 
   React.useEffect(() => {
     if (prediction) {
-      const objects = createObjectPredictions(prediction as tf.Tensor[])
+      const objects = createObjectPredictions(prediction as tf.Tensor4D[])
 
       requestFramRef.current = requestAnimationFrame(() =>
         setObjectDetection(objects)
@@ -119,17 +121,12 @@ interface ClassBuildingArgs {
 const buildObjects = (
   indexes: Float32Array,
   scores: number[],
-{
-  width,
-  height,
-  boxes
-}: BoxBuildingArgs,
-  {
-    classIndexes,
-    classes
-  }: ClassBuildingArgs
-  ): ObjectDetectClassifiedResults | ObjectDetectNonClassifiedResults => {
-  const objects: ObjectDetectClassifiedResults | ObjectDetectNonClassifiedResults = []
+  { width, height, boxes }: BoxBuildingArgs,
+  { classIndexes, classes }: ClassBuildingArgs
+): ObjectDetectClassifiedResults | ObjectDetectNonClassifiedResults => {
+  const objects:
+    | ObjectDetectClassifiedResults
+    | ObjectDetectNonClassifiedResults = []
 
   indexes.forEach((index, i) => {
     const bbox = []
@@ -171,7 +168,8 @@ const buildObjects = (
 const calcMaxScores = (
   scores: Float32Array,
   numBoxes: number,
-  numClasses: number): [number[], number[]] => {
+  numClasses: number
+): [number[], number[]] => {
   if (!numBoxes || !numClasses) {
     return [[], []]
   }
