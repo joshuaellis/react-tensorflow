@@ -14,8 +14,6 @@ const modelSharedProperties = {
 
 module.exports = {
   ...tf,
-  getBackend: () => 'webgl',
-  setBackend: () => null,
   dispose: jest.fn(),
   loadGraphModel: (url: string) => {
     const model = new GraphModel(url)
