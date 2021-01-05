@@ -45,19 +45,19 @@ const MyModelComponent = () => {
 ### useModel
 
 ```tsx
-useModel({ 
-  model?: any, 
-  modelUrl?: string, 
-  layers?: boolean, 
+useModel({
+  model?: any,
+  modelUrl?: string,
+  layers?: boolean,
   onLoadCallback?: (model: GraphModel | LayersModel | null) => void
 }): GraphModel | LayersModel | null
 ```
 
-If `model` or `modelUrl` is omitted useModel will look to find the ModelProvider as it's context 
-for returning the model. When loading a model with this hook, the `layers` boolean is passed if 
-your TF model should be loaded with the function `tf.loadLayersModel` otherwise it is assumed the 
-model should be loaded with `tf.loadGraphModel`. If a model is loaded with `modelUrl` and an 
-`onLoadCallback` function is provided, it will be called with the loaded model. This function is 
+If `model` or `modelUrl` is omitted useModel will look to find the ModelProvider as it's context
+for returning the model. When loading a model with this hook, the `layers` boolean is passed if
+your TF model should be loaded with the function `tf.loadLayersModel` otherwise it is assumed the
+model should be loaded with `tf.loadGraphModel`. If a model is loaded with `modelUrl` and an
+`onLoadCallback` function is provided, it will be called with the loaded model. This function is
 intended to be used as a warm up function that could look like this –
 
 ```js
@@ -78,8 +78,8 @@ intended to be used as a warm up function that could look like this –
 </ModelProvider>
 ```
 
-Wraps the children in a React Provider to be consumed by Context's in either the `useModel` hook 
-or `withModel` HOC. The props passed to this provider are the same as the documented props for 
+Wraps the children in a React Provider to be consumed by Context's in either the `useModel` hook
+or `withModel` HOC. The props passed to this provider are the same as the documented props for
 `useModel`.
 
 ### withModel
@@ -100,10 +100,13 @@ useWebcam (options?: {
   }): [React.MutableRefObject<HTMLVideoElement>, tf.Tensor | null]
 ```
 
-Provides a ref to be used on a video element, the hook then returns a tensor with shape 
-`[1, width, height, 3]` where the width and height are either dictated by the element's width 
-& height or the provided argument documented above. The options argument while documented 
+Provides a ref to be used on a video element, the hook then returns a tensor with shape
+`[1, width, height, 3]` where the width and height are either dictated by the element's width
+& height or the provided argument documented above. The options argument while documented
 above can infact take all the properties of the [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints).
+
+> :point_right: All the following hooks use useModel under the hood, therefore accepting any of the args
+> passed to `useModel` :point_left:
 
 ### usePrediction
 
@@ -118,19 +121,22 @@ usePrediction (options?: {
 }): [(data: tf.Tensor) => void, tf.Tensor | tf.Tensor[] | tf.NamedTensorMap | null]
 ```
 
-Provides a function to set the data you want to use to create a prediction. The data must be 
-in the form of a tensor. It then returns a new tensor as the prediction using either the model 
-set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses 
-`useModel` under the hood. You can then perform different actions such as normalizing the data 
-for to classify the original input. By default `usePrediction` uses `.predict`, if you want to 
-force the use of `.executeAsync` set `useExecute: true` and if you want to use a custom predict 
-function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you 
+Provides a function to set the data you want to use to create a prediction. The data must be
+in the form of a tensor. It then returns a new tensor as the prediction using either the model
+set with the `ModelProvider` component or by passing a modelUrl as an argument as it uses
+`useModel` under the hood. You can then perform different actions such as normalizing the data
+for to classify the original input. By default `usePrediction` uses `.predict`, if you want to
+force the use of `.executeAsync` set `useExecute: true` and if you want to use a custom predict
+function, pass it's name via the `predictionFunction` key. If you're using a LayersModel you
 must set `outputName`.
 
-:no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript 
-errors if the model predicition method is called or will simply return null because the model 
-either does not have an executeAsync or predict function or it does, and it has not returned a 
+:no_entry_sign: Using a `@tensorflow/tfjs-models` model with this hook will cause typescript
+errors if the model predicition method is called or will simply return null because the model
+either does not have an executeAsync or predict function or it does, and it has not returned a
 Tensor. :no_entry_sign:
+
+> :point_right: All the following hooks use usePrediction under the hood, therefore accepting any of the args
+> passed to `usePrediction` :point_left:
 
 ### useClassifier
 
@@ -140,13 +146,35 @@ useClassifer(options?: {
   returns?: number,
   modelUrl?: string,
   layers?: boolean,
-}): [(data: tf.Tensor) => void, Array<{class: number, probability: number}>, Array<{class: string, probability: number}>, null]
+}): [(data: tf.Tensor) => void, Array<{class: number, probability: number}> | Array<{class: string, probability: number}> | null]
 ```
 
-uses `usePrediction` under the hood so it provides a function to set the data, it must be in the 
-form of a tensor. It then returns an array of classifications (be default, the array will have 
-length 5). If the classes argument is provided, the class key in the returned array will be the 
-class at the index of the prediction.
+Returns a function to set the data which must be in the form of a tensor. After prediction has
+been made, returns an array of classifications (be default, the array will have length 5).
+If the classes argument is provided, the class key in the returned array will be the class at
+the index of the prediction.
+
+### useObjectDetect
+
+```tsx
+useObjectDetect(options?:{
+  returns?: number,
+  minConfidence?: number,
+  classes?: {},
+  width?: number,
+  height?: number,
+  modelUrl?: string,
+  layers?: boolean,
+}): [(data: tf.Tensor) => void, Array<{class: number, probability: number, boundingBox: number[]}> | Array<{class: string, probability: number, boundingBox: number[]}> | null]
+```
+
+Returns an array with index 0 being a function to set the data. This data must be in the form
+of a tensor. After a prediction has been made, returns an array of objects detected. Both `height`
+and `width` of the media must be provided to recieve values inside bounding box which will be an
+array of four numbers – `[left, top, width, height]`. `minConfidence` must be a value between 0 - 1.
+The hook then returns an array of detected objects (by default, the array will be length 5). If the
+classes argument is provided, the class key in the returned array will be the class at the index of
+the prediction as a `string`.
 
 ## Contributing
 

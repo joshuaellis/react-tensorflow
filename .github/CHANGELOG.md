@@ -4,11 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.0 – 2021-01-05
+
+### Added
+
+- useObjectDetect hook (#11)
+- useModel & ModelProvider accept a warmup function for models (#26)
+
+### Changed
+
+- useObjectDetect & useClassifier pass restProps to usePrediction (#25)
+- Updated example application to use useObjectDetect hook
+- usePrediction now uses executeAsync instead of execute
+
+### Removed
+
+- CircleCI config file
+
 ## 2.0.0 - 2020-12-01
 
 ### Added
 
-- useClassifer hook
+- useClassifer hook (#10)
 
 ### Fixed
 
@@ -21,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - ModelProvider & useModel report errors in model loading
   - withModel & useModel report errors when no model is available
   - Errors are no in one file `references/errors.ts`
-- Updated example application to use useClassify hook
+- Updated example application to use useClassifier hook
 
 ### Removed
 
