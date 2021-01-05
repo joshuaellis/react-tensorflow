@@ -170,10 +170,6 @@ const calcMaxScores = (
   numBoxes: number,
   numClasses: number
 ): [number[], number[]] => {
-  if (!numBoxes || !numClasses) {
-    return [[], []]
-  }
-
   const maxes = []
   const classes = []
 
