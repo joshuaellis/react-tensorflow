@@ -47,15 +47,17 @@ export default function PageObjects () {
     if (imgLoaded) {
       const { current: img } = imgRef
       if(img){
-        const tensor = getTensorFromImg(img).cast('int32')
+        const tensor = tf.tidy(() => {
+          const tens= tf.browser.fromPixels(img)
+
+          return tens.expandDims(0).cast('int32')
+        })
         if (tensor) {
           setData(tensor)
         }
       }
     }
   }, [imgLoaded])
-
-  console.log(objects)
 
   return (
     <main className={classes.root}>
