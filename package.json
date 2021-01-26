@@ -41,7 +41,7 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "@tensorflow-models/coco-ssd": "^2.1.0",
-    "@tensorflow/tfjs": "^2.7.0",
+    "@tensorflow/tfjs": "^3.0.0",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/react-hooks": "^5.0.0",
