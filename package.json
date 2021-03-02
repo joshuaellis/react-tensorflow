@@ -1,6 +1,6 @@
 {
   "name": "react-tensorflow",
-  "version": "2.1.0",
+  "version": "0.0.0-semantic-release",
   "description": "TensorflowJS based hooks for react.js",
   "files": [
     "/dist"
