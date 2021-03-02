@@ -28,7 +28,7 @@ jobs:
       - name: build package
         run: yarn build
   release:
-    needs: main
+    needs: test
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'joshuaellis/react-tensorflow' && contains('refs/heads/master,refs/heads/beta,refs/heads/alpha',github.ref) && github.event_name == 'push' }}
     steps:
